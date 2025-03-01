@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Side Project Hub - 登入</title>
+    <link rel="stylesheet" href="../../static/css/login/login.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="../static/images/logo.png" id="logo">
+        <h1>登入</h1>
+
+        <!-- 顯示錯誤訊息的區域 -->
+
+        {% if error %}
+          <p style="color: red">{{ error }}</p>
+        {% endif %}
+
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" placeholder="帳號" name="account" required >
+            <input type="password" placeholder="密碼" name="password" required>
+            <button type="submit">登入</button>
+        </form>
+
+        <div class="footer">
+            <p>還沒有帳號？<a href="register">註冊</a></p>
+        </div>
+    </div>
+
+    <script>
+        var parent = document.getElementById('logo');
+        logo.addEventListener('click', function () {
+            window.location.assign('../index');
+        }, true);
+    </script>
+
+</body>
+</html>

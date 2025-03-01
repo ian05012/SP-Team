@@ -1,0 +1,142 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #F1FFFA;
+    color: #464E47;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #CCFCCB;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #568259;
+    position: relative;
+}
+
+img {
+    width: 25%;
+    padding-top: 0%;
+}
+#logo img{
+    cursor: pointer;
+}
+h2 {
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #464E47;
+}
+
+nav {
+    margin: 0px 0;
+    font-size: 1.2em;
+}
+
+nav a {
+
+    margin: 0 15px;
+    text-decoration: none;
+    color: #464E47;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #568259;
+}
+input{
+    background-color: #E1FFE1;
+}
+.search-bar {
+    padding: 8px;
+    border: 2px solid #568259;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.header-transition {
+    height: 20px;
+    background: linear-gradient(to bottom, #CCFCCB, #F1FFFA);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.latest-teams {
+    text-align: center;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.divider {
+    width: calc(100% - 30%);
+    height: 2px;
+    background-color: #568259;
+    margin: 5px 20px;
+}
+
+.projects {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+}
+
+.project {
+    background-color: #F1FFFA;
+    border: 1px solid #CCFCCB;
+    border-radius: 5px;
+    padding: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to bottom, #F1FFFA 80%, #ECFFF8 100%);
+}
+
+.project:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.project h2 {
+    margin: 0 0 10px;
+    color: #568259;
+}
+
+footer {
+    background: linear-gradient(to bottom, #F1FFFA 0%, #568259 10%);
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.more-teams-button {
+    background: none;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 3em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.more-teams-button:hover {
+
+    color: #568259;
+}
+

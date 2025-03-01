@@ -1,0 +1,89 @@
+img{
+    width: 70%;
+    overflow: hidden;
+    margin-bottom: -12%;
+}
+
+img{
+     cursor: pointer;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #F1FFFA;
+    color: #464E47;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #568259;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #568259;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #568259;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #4A6B4D;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #464E47;
+}
+
+.error {
+    box-shadow: 0 0 5px red;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: none; /* 初始隱藏 */
+    margin-bottom: 3%;
+}
+
+a {
+    text-decoration: none;
+    color: #568259;
+    transition: color 0.3s;
+}
+
+a:hover{
+
+    color: black;
+
+}
