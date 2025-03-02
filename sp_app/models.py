@@ -16,3 +16,12 @@ class user(AbstractUser):
     def __str__(self):
         return self.username
 
+class Article(models.Model):
+    title = models.TextField(default="")
+    content = models.TextField(default="")
+    author = models.ForeignKey(user, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title

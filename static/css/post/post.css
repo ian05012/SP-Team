@@ -1,0 +1,113 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #F1FFFA;
+    color: #464E47;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #CCFCCB;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #568259;
+    position: relative;
+}
+
+img {
+    width: 15%;
+    padding-top: 0%;
+}
+
+#logo img {
+    cursor: pointer;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #464E47;
+}
+
+
+.header-transition {
+    height: 20px;
+    background: linear-gradient(to bottom, #CCFCCB, #F1FFFA);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.article-form {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #F1FFFA;
+    border: 1px solid #CCFCCB;
+    border-radius: 10px;
+    padding: 100px 120px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    margin: 50px auto;
+}
+
+.article-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #568259;
+}
+
+.input-field {
+    width: 96%;
+    padding: 10px;
+    border: 1px solid grey;
+    margin: 10px 0;
+    border-radius: 0px;
+    background-color: #F1FFFA;
+
+}
+
+textarea.input-field {
+    resize: vertical;
+    height: 150px;
+}
+
+.publish-button {
+    background-color: #568259;
+    color: white;
+    padding: 10px 20px;
+    margin: 50px auto 10px;
+    display: block;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.publish-button:hover {
+
+    background-color: #466E57;
+    transform: scale(1.01); /* Slight scaling effect */
+    cursor: pointer; /* Pointer on hover */
+    transition: all 0.3s ease;
+}
+
+footer {
+    background: linear-gradient(to bottom, #F1FFFA 0%, #568259 10%);
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

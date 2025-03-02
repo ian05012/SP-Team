@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>創建團隊</title>
+    <link rel="stylesheet" href="../../static/css/post/post.css">
+</head>
+<body>
+
+<header>
+    <img src="../../static/images/logo.png" id="logo">
+
+    <div class="header-transition"></div>
+</header>
+<style>
+    @import '../../static/css/post/font.css';
+</style>
+<div class="content">
+    <div class="article-form">
+        <h2>創建團隊</h2>
+
+        <form action="/post_article" method="POST">
+
+            <label for="title">標題：</label>
+            <input type="text" id="title" name="title" placeholder="輸入項目標題" required class="input-field">
+
+
+
+            <label for="content">內文：</label>
+            <!-- Include stylesheet -->
+            <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+
+            <!-- Create the editor container -->
+            <div id="editor">
+              <p>哈囉</p>
+              <p>我想找人合力完成我的 <strong>巧克力漢堡排</strong> ，歡迎有興趣的朋友們連絡我</p>
+              <p><br /></p>
+            </div>
+
+            <!-- Include the Quill library -->
+            <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+            <!-- Initialize Quill editor -->
+            <script>
+
+
+
+                var fonts = ['SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman','sans-serif'];
+                var Font = Quill.import('formats/font');
+                Font.whitelist = fonts;
+                Quill.register(Font, true);
+                const toolbarOptions = [
+                    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                    [{ 'font': fonts}],
+                  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                  ['blockquote', 'code-block'],
+                  ['link', 'image', 'video'],
+
+                  [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+
+                  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+
+                  [{ 'align': [] }],
+                ];
+
+              const quill = new Quill('#editor', {
+                  theme: 'snow',
+                  modules: {
+                    toolbar: toolbarOptions
+                  },
+              });
+            </script>
+            <!-- 發布按鈕 -->
+            <button type="submit" class="publish-button">創建團隊</button>
+        </form>
+    </div>
+</div>
+
+<footer>
+    <div class="footer">
+        <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

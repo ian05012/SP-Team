@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sp_app',
+    'taggit',
 
 ]
 AUTH_USER_MODEL = 'sp_app.user'
