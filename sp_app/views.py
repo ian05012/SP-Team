@@ -18,5 +18,8 @@ def register(request):
 def logout(request):
     return auth_system.logout(request)
 
-def createTeam(request):
+
+def create_team(request):
+    if not request.user.is_authenticated:
+        return redirect('/account/login')
     return render(request, 'post/post.html')

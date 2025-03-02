@@ -52,7 +52,7 @@ def register(request):
             new_user.save()
             info_message = '註冊成功，請登入您的帳號！'
 
-    # 傳遞提示訊息到模板
+
     return render(request, 'account/register.html', {'info_message': info_message})
 
 

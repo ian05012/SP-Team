@@ -16,7 +16,7 @@ class user(AbstractUser):
     def __str__(self):
         return self.username
 
-class Article(models.Model):
+class Post(models.Model):
     title = models.TextField(default="")
     content = models.TextField(default="")
     author = models.ForeignKey(user, on_delete=models.CASCADE)
