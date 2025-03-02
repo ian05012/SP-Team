@@ -17,3 +17,6 @@ def register(request):
 # 登出
 def logout(request):
     return auth_system.logout(request)
+
+def createTeam(request):
+    return render(request, 'post/post.html')
