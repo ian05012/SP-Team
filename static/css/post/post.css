@@ -45,19 +45,19 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 .article-form {
-    width: 100%;
-    max-width: 1200px;
+    width: 50%;
+    max-width: 700px;
     background-color: #F1FFFA;
     border: 1px solid #CCFCCB;
-    border-radius: 10px;
-    padding: 100px 120px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 40px 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: left;
-    margin: 50px auto;
+    margin: 10px auto;
 }
 
 .article-form h2 {

@@ -20,8 +20,8 @@
     <div class="article-form">
         <h2>創建團隊</h2>
 
-        <form action="/post_article" method="POST">
-
+        <form action="post" method="POST">
+            {% csrf_token %}
             <label for="title">標題：</label>
             <input type="text" id="title" name="title" placeholder="輸入項目標題" required class="input-field">
 
@@ -38,6 +38,7 @@
               <p><br /></p>
             </div>
 
+            <button type="submit" class="publish-button">創建團隊</button>
             <!-- Include the Quill library -->
             <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
@@ -70,9 +71,29 @@
                     toolbar: toolbarOptions
                   },
               });
+
+                var html_content = quill.getSemanticHTML();
+
+                document.querySelector('form').addEventListener('submit', function (event) {
+                    // Prevent default form submission to ensure html_content is included
+                    event.preventDefault();
+
+                    // Add the html_content from the editor to a hidden input field
+                    var hiddenInput = document.createElement('input');
+                    hiddenInput.setAttribute('type', 'hidden');
+                    hiddenInput.setAttribute('name', 'html_content');
+                    hiddenInput.setAttribute('value', html_content);
+
+                    // Append the hidden input to the form
+                    this.appendChild(hiddenInput);
+
+                    // Submit the form
+                    this.submit();
+                });
+              
             </script>
             <!-- 發布按鈕 -->
-            <button type="submit" class="publish-button">創建團隊</button>
+
         </form>
     </div>
 </div>

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from sp_app.backend import auth_system
+from sp_app.models import Post
+
 
 # 首頁
 def index(request):
@@ -22,4 +24,12 @@ def logout(request):
 def create_team(request):
     if not request.user.is_authenticated:
         return redirect('/account/login')
+
+    if request.method == 'POST':
+        new_post = Post()
+        new_post.title = request.POST.get('title', '').strip()
+        new_post.content = request.POST.get('html_content', '').strip()
+        new_post.author = request.user
+        new_post.save()
+        return redirect('/index')
     return render(request, 'post/post.html')
