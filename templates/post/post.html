@@ -18,66 +18,64 @@
 </style>
 <div class="content">
     <div class="article-form">
-        <h2>創建團隊</h2>
+        <h2>Side Project Hub - 創建團隊</h2>
 
         <form action="post" method="POST">
             {% csrf_token %}
             <label for="title">標題：</label>
             <input type="text" id="title" name="title" placeholder="輸入項目標題" required class="input-field">
-
-
+            <label for="title">簡介：</label>
+            <input type="text" id="description" name="description" placeholder="簡單描述你的專案(出現在搜尋頁面)" required class="input-field" maxlength="80">
 
             <label for="content">內文：</label>
             <!-- Include stylesheet -->
-            <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+            <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
 
             <!-- Create the editor container -->
             <div id="editor">
-              <p>哈囉</p>
-              <p>我想找人合力完成我的 <strong>巧克力漢堡排</strong> ，歡迎有興趣的朋友們連絡我</p>
-              <p><br /></p>
+                <p>哈囉</p>
+                <p>我想找人合力完成我的 <strong>巧克力漢堡排</strong> ，歡迎有興趣的朋友們連絡我</p>
+                <p><br/></p>
             </div>
 
             <button type="submit" class="publish-button">創建團隊</button>
             <!-- Include the Quill library -->
             <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-
+            <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
             <!-- Initialize Quill editor -->
             <script>
 
 
-
-                var fonts = ['SimSun', 'SimHei','Microsoft-YaHei','KaiTi','FangSong','Arial','Times-New-Roman','sans-serif'];
+                var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif'];
                 var Font = Quill.import('formats/font');
                 Font.whitelist = fonts;
                 Quill.register(Font, true);
                 const toolbarOptions = [
-                    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-                    [{ 'font': fonts}],
-                  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                  ['blockquote', 'code-block'],
-                  ['link', 'image', 'video'],
+                    [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
+                    [{'font': fonts}],
+                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                    ['blockquote', 'code-block'],
+                    ['link', 'image', 'video'],
 
-                  [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+                    [{'list': 'ordered'}, {'list': 'bullet'}, {'list': 'check'}],
 
-                  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                    [{'color': []}, {'background': []}],          // dropdown with defaults from theme
 
-                  [{ 'align': [] }],
+                    [{'align': []}],
                 ];
 
-              const quill = new Quill('#editor', {
-                  theme: 'snow',
-                  modules: {
-                    toolbar: toolbarOptions
-                  },
-              });
+                const quill = new Quill('#editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: toolbarOptions
+                    },
+                });
 
-                var html_content = quill.getSemanticHTML();
 
                 document.querySelector('form').addEventListener('submit', function (event) {
                     // Prevent default form submission to ensure html_content is included
                     event.preventDefault();
-
+                    var html_content = quill.root.innerHTML;
                     // Add the html_content from the editor to a hidden input field
                     var hiddenInput = document.createElement('input');
                     hiddenInput.setAttribute('type', 'hidden');
@@ -90,9 +88,9 @@
                     // Submit the form
                     this.submit();
                 });
-              
+
             </script>
-            <!-- 發布按鈕 -->
+
 
         </form>
     </div>

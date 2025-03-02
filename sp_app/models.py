@@ -18,6 +18,7 @@ class user(AbstractUser):
 
 class Post(models.Model):
     title = models.TextField(default="")
+    description = models.TextField(default="")
     content = models.TextField(default="")
     author = models.ForeignKey(user, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)

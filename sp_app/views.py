@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect
-from sp_app.backend import auth_system
-from sp_app.models import Post
+from sp_app.backend import auth_system, post_manager
 
 
 # 首頁
 def index(request):
-    return render(request, 'index.html')
+    posts_list = post_manager.get_posts_list()
+    if len(posts_list) >= 8:
+        new_posts_list = posts_list[-9:-1]
+    else:
+        new_posts_list = posts_list[-len(posts_list):-1]
+    print(new_posts_list)
+    return render(request, 'index.html', {'posts_list': new_posts_list})
 
 
 # 登入
@@ -22,14 +27,4 @@ def logout(request):
 
 
 def create_team(request):
-    if not request.user.is_authenticated:
-        return redirect('/account/login')
-
-    if request.method == 'POST':
-        new_post = Post()
-        new_post.title = request.POST.get('title', '').strip()
-        new_post.content = request.POST.get('html_content', '').strip()
-        new_post.author = request.user
-        new_post.save()
-        return redirect('/index')
-    return render(request, 'post/post.html')
+    return post_manager.create_team(request)
