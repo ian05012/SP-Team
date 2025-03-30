@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='user',
-            name='desription',
+            name='description',
             field=models.TextField(default='這個人很懶，還沒留下任何東西~'),
         ),
         migrations.AlterField(

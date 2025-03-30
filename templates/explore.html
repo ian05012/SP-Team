@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>探索專案團隊 - SP-HUB</title>
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="glass-header" style="padding: 0.5rem 2rem">
+    <nav class="nav-container">
+        <a href="/" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        <form method="GET" action="{% url 'explore' %}" class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   class="search-bar" 
+                   name="search_query"
+                   placeholder="搜尋專案、作者或描述..."
+                   value="{{ search_query|default:'' }}">
+            <button type="submit" class="search-btn" style="display: none;"></button>
+        </form>
+        <div class="nav-links">
+            <a href="/post/create_post" class="nav-btn neon-hover"><i class="fas fa-plus-circle"></i>創建團隊</a>
+            {% if request.user.is_authenticated %}
+                <div class="user-dropdown">
+                    <button class="user-profile nav-btn neon-hover" style="background: var(--primary-green);">
+                        <i class="fas fa-user-astronaut"></i>
+                        <span>{{ request.user.username }}</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#"><i class="fas fa-cog"></i>個人設定</a>
+                        <a href="/account/logout"><i class="fas fa-sign-out-alt"></i>登出</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+                <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="header-gradient"></div>
+</header>
+
+
+<div class="content" style="margin-top: 2%;">
+    <div class="section-header">
+        <h2 class="section-title" style="text-align: center;">
+            <span class="highlight">所有專案團隊</span>
+        </h2>
+        <div class="decorative-line"></div>
+    </div>
+    
+
+    <div class="project-grid" style="grid-template-columns: repeat(2, 1fr); gap: 2rem; padding: 0 2rem;">
+        {% for post in page_obj %}
+        <div class="project-card">
+            <a href="{% url 'post_detail' post.id %}" class="project-link" style="text-decoration: none; color: inherit;">
+                <div class="card-header">
+                    <div class="tech-stack">
+                        {% for skill in post.required_skills.all %}
+                        <span class="tech-tag">{{ skill.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <i class="fas fa-users card-icon" style="color: var(--gold-accent);"></i>
+                </div>
+                <h3 class="project-title">{{ post.title }}</h3>
+                <p class="project-description">{{ post.description|truncatechars:150 }}</p>
+                <div class="project-meta">
+                    <div class="meta-item">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+                            <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+                        </svg>
+                        {{ post.created|date:"Y/m/d" }} 建立
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-heart"></i>
+                        {{post.likes}}
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-eye"></i>
+                        {{post.watched}}
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="container-fluid">
+        <nav aria-label="Page navigation" class="d-flex justify-content-center mt-5">
+            <ul class="pagination pagination-lg glass-effect align-items-center" 
+                style="padding:1rem; border-radius:8px; backdrop-filter:blur(10px); width:100%; margin:0 auto; justify-content:center !important;">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link neon-hover" href="?page=1" style="min-width: 100px;">
+                        <i class="fas fa-angle-double-left"></i> 第一頁
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link neon-hover" href="?page={{ page_obj.previous_page_number }}" style="min-width: 100px;">
+                        <i class="fas fa-chevron-left"></i> 上一頁
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled align-self-center mx-3">
+                    <span class="page-link text-dark" style="background: transparent; border: none;">
+                        第 {{ page_obj.number }} 頁／共 {{ page_obj.paginator.num_pages }} 頁
+                    </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link neon-hover" href="?page={{ page_obj.next_page_number }}" style="min-width: 100px;">
+                        下一頁 <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link neon-hover" href="?page={{ page_obj.paginator.num_pages }}" style="min-width: 100px;">
+                        最後一頁 <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<footer>
+    <div class="footer" style="text-align: center;">
+        <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
