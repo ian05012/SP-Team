@@ -22,8 +22,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', views.index),
     path('', views.index),
-    path('account/login', views.login),
-    path('account/logout', views.logout),
-    path('account/register', views.register),
-    path('post/post', views.create_team)
+    path('account/login/', views.login, name='login'),
+    path('account/logout/', views.logout, name='logout'),
+    path('account/register/', views.register, name='register'),
+    path('post/create_post/create_post', views.create_team, name='create_post'),
+    path('post/create_post/', views.create_team, name='create_post'),
+    path('post/<int:post_id>/', views.post_detail, name='post_detail'),
+    path('explore/',views.explore, name='explore')
+
 ]

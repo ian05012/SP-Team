@@ -3,70 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Side Project Hub - 註冊</title>
-    <link rel="stylesheet" href="../../static/css/login/login.css">
+    <title>SP-HUB | 會員註冊</title>
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <div class="login-container">
-        <img src="../static/images/logo.png" id="logo">
-        <h1>註冊</h1>
+<header class="glass-header" style="padding: 0.5rem 2rem">
+    <nav class="nav-container">
+        <a href="../../index" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        <form method="GET" action="{% url 'explore' %}" class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   class="search-bar" 
+                   name="search_query"
+                   placeholder="搜尋專案、作者或描述..."
+                   value="{{ search_query|default:'' }}">
+            <button type="submit" class="search-btn" style="display: none;"></button>
+        </form>
+        
+        <div class="nav-links">
+            <a href="/post/create_post" class="nav-btn neon-hover"><i class="fas fa-plus-circle"></i>創建團隊</a>
+            <a href="#" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+            <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+        </div>
+    </nav>
+    <div class="header-gradient"></div>
+</header>
 
-        <!-- 顯示提示訊息的區域 -->
+<div class="content" style="margin-top: 5%;">
+    <div class="section-header">
+        <h2 class="section-title" style="text-align: center;">
+            <span class="highlight">會員註冊</span>
+        </h2>
+        <div class="decorative-line"></div>
+    </div>
+
+    <div class="auth-card">
 
         {% if info_message %}
-           <p style="color: red">  {{ info_message }}</p>
+        <div class="info-message">{{ info_message }}</div>
         {% endif %}
-
 
         <form method="POST">
             {% csrf_token %}
-            <input type="text" id="username" name="account" placeholder="帳號" required>
-            <input type="password" id="password" name="password" placeholder="密碼" required>
-            <input type="password" id="confirmPassword" placeholder="確認密碼" required>
-            <span id="error-message" class="error-message" style="display: none;">與輸入密碼不一致</span>
-            <button type="submit" id="registerButton" disabled>註冊</button>
+            <div class="form-group">
+                <div class="icon-input-wrapper">
+                    <i class="fas fa-user-circle input-icon"></i>
+                    <input type="text" class="form-input" id="username" name="account" placeholder="帳號" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="icon-input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" class="form-input" id="password" name="password" placeholder="密碼" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="icon-input-wrapper">
+                    <i class="fas fa-check-circle input-icon"></i>
+                    <input type="password" class="form-input" id="confirmPassword" placeholder="確認密碼" required>
+                </div>
+                <div id="error-message" class="error-text" style="display: none;">與輸入密碼不一致</div>
+            </div>
+            <button type="submit" class="nav-btn full-width-btn" id="registerButton" disabled>
+                <i class="fas fa-user-plus"></i>
+                <span>立即註冊</span>
+            </button>
         </form>
 
-        <div class="footer">
-            <p>已經有帳號？<a href="login">登入</a></p>
-        </div>
+        <div class="auth-link">
+            <span>已有帳號？</span>
+            <a href="/account/login" class="neon-hover">前往登入</a>
     </div>
+</main>
 
-    <script>
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const errorMessage = document.getElementById('error-message');
-        const registerButton = document.getElementById('registerButton');
+<footer>
+    <div class="footer" style="text-align: center;">
+        <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
+    </div>
+</footer>
 
-        // 當密碼或確認密碼輸入欄改變時，檢查是否匹配
-        confirmPasswordInput.addEventListener('input', function() {
-            // 如果密碼與確認密碼不一致
-            if (this.value !== passwordInput.value) {
-                errorMessage.style.display = 'block'; // 顯示錯誤訊息
-                registerButton.disabled = true; // 禁用註冊按鈕
-            } else {
-                errorMessage.style.display = 'none'; // 隱藏錯誤訊息
-                registerButton.disabled = false; // 啟用註冊按鈕
-            }
-        });
+<script>
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const errorMessage = document.getElementById('error-message');
+    const registerButton = document.getElementById('registerButton');
 
-        passwordInput.addEventListener('input', function() {
-            // 同時檢查密碼輸入是否匹配
-            if (confirmPasswordInput.value !== this.value) {
-                errorMessage.style.display = 'block'; // 顯示錯誤訊息
-                registerButton.disabled = true; // 禁用註冊按鈕
-            } else {
-                errorMessage.style.display = 'none'; // 隱藏錯誤訊息
-                registerButton.disabled = false; // 啟用註冊按鈕
-            }
-        });
+    function validatePassword() {
+        if (confirmPasswordInput.value !== passwordInput.value) {
+            confirmPasswordInput.classList.add('input-error');
+            errorMessage.style.display = 'block';
+            registerButton.disabled = true;
+        } else {
+            confirmPasswordInput.classList.remove('input-error');
+            errorMessage.style.display = 'none';
+            registerButton.disabled = false;
+        }
+    }
 
-        // 點擊 Logo 跳轉到首頁
-        const logo = document.getElementById('logo');
-        logo.addEventListener('click', function () {
-             window.location.assign('../index');
-        }, true);
-    </script>
+    confirmPasswordInput.addEventListener('input', validatePassword);
+    passwordInput.addEventListener('input', validatePassword);
+</script>
 </body>
 </html>

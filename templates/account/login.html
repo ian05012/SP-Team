@@ -3,40 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Side Project Hub - 登入</title>
-    <link rel="stylesheet" href="../../static/css/login/login.css">
+    <title>SP-HUB | 會員登入</title>
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-    <div class="login-container">
-        <img src="../static/images/logo.png" id="logo">
-        <h1>登入</h1>
+<header class="glass-header" style="padding: 0.5rem 2rem">
+    <nav class="nav-container">
+        <a href="../../index" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        <form method="GET" action="{% url 'explore' %}" class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   class="search-bar" 
+                   name="search_query"
+                   placeholder="搜尋專案、作者或描述..."
+                   value="{{ search_query|default:'' }}">
+            <button type="submit" class="search-btn" style="display: none;"></button>
+        </form>
+        
+        <div class="nav-links">
+            <a href="/post/create_post" class="nav-btn neon-hover"><i class="fas fa-plus-circle"></i>創建團隊</a>
+            <a href="#" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+            <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+        </div>
+    </nav>
+    <div class="header-gradient"></div>
+</header>
 
-        <!-- 顯示錯誤訊息的區域 -->
+<div class="content" style="margin-top: 5%;">
+    <div class="section-header">
+        <h2 class="section-title" style="text-align: center;">
+            <span class="highlight">會員登入</span>
+        </h2>
+        <div class="decorative-line"></div>
+    </div>
 
+    <div class="auth-card">
         {% if error %}
-          <p style="color: red">{{ error }}</p>
+        <div class="alert-message">{{ error }}</div>
         {% endif %}
-
 
         <form method="POST">
             {% csrf_token %}
-            <input type="text" placeholder="帳號" name="account" required >
-            <input type="password" placeholder="密碼" name="password" required>
-            <button type="submit">登入</button>
+            <div class="form-group">
+                <div class="icon-input-wrapper">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" class="form-input" placeholder="帳號" name="account" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="icon-input-wrapper">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" class="form-input" placeholder="密碼" name="password" required>
+                </div>
+            </div>
+            <button type="submit" class="nav-btn full-width-btn">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>登入帳號</span>
+            </button>
         </form>
 
-        <div class="footer">
-            <p>還沒有帳號？<a href="register">註冊</a></p>
-        </div>
+        <div class="auth-link">
+            <span>尚未成為會員？</span>
+            <a href="/account/register" class="neon-hover">立即註冊</a>
     </div>
+</main>
 
-    <script>
-        var parent = document.getElementById('logo');
-        logo.addEventListener('click', function () {
-            window.location.assign('../index');
-        }, true);
-    </script>
+<footer>
+    <div class="footer" style="text-align: center;">
+        <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
+    </div>
+</footer>
 
 </body>
 </html>

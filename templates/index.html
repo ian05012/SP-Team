@@ -9,47 +9,93 @@
 </head>
 <body>
 
-<header>
-    <img src="../static/images/logo.png" id="logo">
-    <nav>
-        <input type="text" class="search-bar" placeholder="搜尋...">
-        <a href="/post/post">創建團隊</a>
-        <a href="#">尋找團隊</a>
+<header class="glass-header" style="padding: 0.5rem 2rem">
 
-        {% if request.user.is_authenticated %}
-            <a>用戶: {{ request.user.username }}</a>
-            <a href="/account/logout">登出</a>
-        {% else %}
-            <a href="/account/login">登入</a>
-            <a href="/account/register">註冊</a>
-        {% endif %}
+    <nav class="nav-container">
+        <a href="" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        
+        <form method="GET" action="{% url 'explore' %}" class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   class="search-bar" 
+                   name="search_query"
+                   placeholder="搜尋專案、作者或描述..."
+                   value="{{ search_query|default:'' }}">
+            <button type="submit" class="search-btn" style="display: none;"></button>
+        </form>
+        <div class="nav-links">
+            <a href="/post/create_post" class="nav-btn neon-hover"><i class="fas fa-plus-circle"></i>創建團隊</a>
+            <a href="explore" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+
+            {% if request.user.is_authenticated %}
+                <div class="user-dropdown">
+                    <button class="user-profile nav-btn neon-hover" style="background: var(--primary-green);">
+                        <i class="fas fa-user-astronaut"></i>
+                        <span>{{ request.user.username }}</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#"><i class="fas fa-cog"></i>個人設定</a>
+                        <a href="/account/logout"><i class="fas fa-sign-out-alt"></i>登出</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+                <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+            {% endif %}
+        </div>
     </nav>
-    <div class="header-transition"></div> <!-- 渐变过渡效果 -->
+    <div class="header-gradient"></div>
 </header>
 
-<div class="content">
-    <div class="latest-teams">
-        <h2>最新團隊</h2> <!-- 大标题 -->
+<div class="content" style="margin-top: 2%;">
+    <div class="section-header">
+        <h2 class="section-title" style="text-align: center;">
+            <span class="highlight">最新專案團隊</span>
+        </h2>
+        <div class="decorative-line"></div>
     </div>
 
-    <!-- 添加分隔线 -->
-    <div class="divider"></div>
-
-    <div class="projects">
+    <div class="project-grid">
         {% for post in posts_list %}
-            <div class="project">
-                <h2>{{ post.title }}</h2>
-                <p>{{ post.description }}</p>
+    <div class="project-card">
+      <a href="{% url 'post_detail' post.id %}" class="project-link" style="text-decoration: none; color: inherit;">
+            <div class="card-header">
+                <div class="tech-stack">
+                    {% for tag in post.tags.all %}
+                    <span class="tech-tag">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                <i class="fas fa-rocket card-icon" style="color: var(--gold-accent);"></i>
             </div>
-        {% endfor %}
-    </div>
-    <button class="more-teams-button"><i class="fa-regular fa-circle-right"></i></button>
+            <h3 class="project-title">{{ post.title }}</h3>
+            <p class="project-description">{{ post.description }}</p>
+            <div class="project-meta">
+                <div class="meta-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+                        <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275z"/>
+                    </svg>
+                    成員 {{ post.current_members }}/{{ post.required_members }}
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ post.progress }}%"></div>
+                </div>
+            </div>
+        </a>
+        </div>
+    
+    {% endfor %}
+</div>
+    <a href="explore">
+    <button class="load-more-btn">
+        <i class="fas fa-chevron-circle-down"></i>
+        <span>載入更多</span>
+    </button></a>
 
 
 </div>
 
 <footer>
-    <div class="footer">
+    <div class="footer" style="text-align: center;">
         <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
     </div>
 
@@ -64,21 +110,6 @@
     </script>
 {% endif %}
 
-<script>
-
-    document.querySelectorAll('.project').forEach(project => {
-        project.addEventListener('click', () => {
-            alert('點三小 幹你娘任光謙');
-        });
-    });
-
-    var parent = document.getElementById('logo');
-
-    logo.addEventListener('click', function () {
-        history.go(0);
-    }, true);
-
-</script>
 
 </body>
 </html>

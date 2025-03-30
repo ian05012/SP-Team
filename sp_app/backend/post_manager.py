@@ -15,7 +15,7 @@ def create_team(request):
         new_post.author = request.user
         new_post.save()
         return redirect('/index')
-    return render(request, 'post/post.html')
+    return render(request, 'post/create_post.html')
 
 def get_posts_list():
     return list(Post.objects.order_by('-id'))

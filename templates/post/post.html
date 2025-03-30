@@ -3,101 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>創建團隊</title>
-    <link rel="stylesheet" href="../../static/css/post/post.css">
+    <title>SP-HUB | 專案詳情</title>
+    <link rel="stylesheet" href="../../static/css/styles.css">
+    <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<header>
-    <img src="../../static/images/logo.png" id="logo">
-
-    <div class="header-transition"></div>
-</header>
-<style>
-    @import '../../static/css/post/font.css';
-</style>
-<div class="content">
-    <div class="article-form">
-        <h2>Side Project Hub - 創建團隊</h2>
-
-        <form action="post" method="POST">
-            {% csrf_token %}
-            <label for="title">標題：</label>
-            <input type="text" id="title" name="title" placeholder="輸入項目標題" required class="input-field">
-            <label for="title">簡介：</label>
-            <input type="text" id="description" name="description" placeholder="簡單描述你的專案(出現在搜尋頁面)" required class="input-field" maxlength="80">
-
-            <label for="content">內文：</label>
-            <!-- Include stylesheet -->
-            <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
-
-            <!-- Create the editor container -->
-            <div id="editor">
-                <p>哈囉</p>
-                <p>我想找人合力完成我的 <strong>巧克力漢堡排</strong> ，歡迎有興趣的朋友們連絡我</p>
-                <p><br/></p>
-            </div>
-
-            <button type="submit" class="publish-button">創建團隊</button>
-            <!-- Include the Quill library -->
-            <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-            <!-- Initialize Quill editor -->
-            <script>
-
-
-                var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif'];
-                var Font = Quill.import('formats/font');
-                Font.whitelist = fonts;
-                Quill.register(Font, true);
-                const toolbarOptions = [
-                    [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
-                    [{'font': fonts}],
-                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                    ['blockquote', 'code-block'],
-                    ['link', 'image', 'video'],
-
-                    [{'list': 'ordered'}, {'list': 'bullet'}, {'list': 'check'}],
-
-                    [{'color': []}, {'background': []}],          // dropdown with defaults from theme
-
-                    [{'align': []}],
-                ];
-
-                const quill = new Quill('#editor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: toolbarOptions
-                    },
-                });
-
-
-                document.querySelector('form').addEventListener('submit', function (event) {
-                    // Prevent default form submission to ensure html_content is included
-                    event.preventDefault();
-                    var html_content = quill.root.innerHTML;
-                    // Add the html_content from the editor to a hidden input field
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.setAttribute('type', 'hidden');
-                    hiddenInput.setAttribute('name', 'html_content');
-                    hiddenInput.setAttribute('value', html_content);
-
-                    // Append the hidden input to the form
-                    this.appendChild(hiddenInput);
-
-                    // Submit the form
-                    this.submit();
-                });
-
-            </script>
-
-
+<header class="glass-header" style="padding: 0.5rem 2rem">
+    <nav class="nav-container">
+        <a href="../../index" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        <form method="GET" action="{% url 'explore' %}" class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   class="search-bar" 
+                   name="search_query"
+                   placeholder="搜尋專案、作者或描述..."
+                   value="{{ search_query|default:'' }}">
+            <button type="submit" class="search-btn" style="display: none;"></button>
         </form>
+        
+        <div class="nav-links">
+            <a href="/post/create_post" class="nav-btn neon-hover"><i class="fas fa-plus-circle"></i>創建團隊</a>
+            <a href="#" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+            {% if request.user.is_authenticated %}
+                <div class="user-dropdown">
+                    <button class="user-profile nav-btn neon-hover" style="background: var(--primary-green);">
+                        <i class="fas fa-user-astronaut"></i>
+                        <span>{{ request.user.username }}</span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#"><i class="fas fa-cog"></i>個人設定</a>
+                        <a href="/account/logout"><i class="fas fa-sign-out-alt"></i>登出</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+                <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="header-gradient"></div>
+</header>
+<div class="content" style="margin-top: 2%; padding: 0 2rem;">
+    <div class="section-header">
+        <h2 class="section-title" style="text-align: center;">
+            <span class="highlight">{{ post.title }}</span>
+        </h2>
+        <div class="decorative-line"></div>
+    </div>
+
+    <div class="article-container">
+        <div class="post-content">
+            <div class="post-content-body glass-card" style="padding: 2rem; margin: 2rem 0;">
+                {{ post.content|safe }}
+            </div>
+        </div>
+
+        <div class="post-meta glass-card">
+            <div class="author-info">
+                
+                <div class="author-details">
+                    <h3 class="neon-text">{{ post.author.username }}</h3>
+                    <span class="post-time">{{ post.created|date:"Y/m/d H:i" }}</span>
+                </div>
+            </div>
+            
+            <div class="like-section">
+                <button class="like-btn neon-hover">
+                    <i class="fas fa-rocket"></i>
+                    <span class="like-count">{% if post.likes %}{{ post.likes }}{% else %}0{% endif %}</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="comments-section glass-card">
+            <h3 class="section-subtitle neon-text">留言討論區</h3>
+            
+            <form class="comment-form">
+                <textarea 
+                    class="comment-input neon-input" 
+                    placeholder="輸入您的留言..."
+                    rows="3"
+                ></textarea>
+                <button type="submit" class="nav-btn neon-hover">
+                    <i class="fas fa-paper-plane"></i> 發送留言
+                </button>
+            </form>
+
+            <div class="comment-list">
+                <!-- 範例留言 -->
+                <div class="comment-item">
+                    <img src="../static/images/default-avatar.png" alt="用戶頭像" class="comment-avatar">
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author neon-text">測試用戶</span>
+                            <span class="comment-time">2025/03/30 19:30</span>
+                        </div>
+                        <p class="comment-text">這個專案看起來超酷！如何參與開發？</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <footer>
-    <div class="footer">
+    <div class="footer" style="text-align: center;">
         <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
     </div>
 </footer>
