@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('password', models.TextField()),
                 ('name', models.TextField()),
                 ('gender', models.TextField(default='男')),
-                ('description', models.TextField()),
+                ('desription', models.TextField()),
                 ('headshot', models.TextField()),
                 ('created', models.DateTimeField(auto_now_add=True)),
             ],
