@@ -1,7 +1,5 @@
 from django.shortcuts import redirect, render
-
 from sp_app.models import Post
-
 
 def create_team(request):
     if not request.user.is_authenticated:
@@ -11,12 +9,14 @@ def create_team(request):
         new_post = Post()
         new_post.title = request.POST.get('title', '').strip()
         new_post.description = request.POST.get('description', '').strip()
-        new_post.content = request.POST.get('html_content', '').strip()
+        html_content = request.POST.get('content', '')
+        print("Received HTML content:", html_content)
+        new_post.content = html_content
         new_post.author = request.user
         new_post.save()
-        return redirect('/index')
+        return redirect('/')    
+
     return render(request, 'post/create_post.html')
 
 def get_posts_list():
     return list(Post.objects.order_by('-id'))
-

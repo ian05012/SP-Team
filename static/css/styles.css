@@ -393,14 +393,74 @@ body {
 }
 
 .project-card {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    transition: all var(--transition-speed) ease;
-    border: 1px solid rgba(0,0,0,0.05);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-soft);
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  transition: all var(--transition-speed) ease;
+  border: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.desc-container {
+  position: relative;
+  margin: 10px 0;
+}
+
+.project-description {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  max-height: 2.8em; /* 兩行高度 */
+  overflow: hidden;
+  position: relative;
+}
+
+.desc-container.needs-fade .project-description::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.26em;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.9) 80%);
+  display: none; /* 先隱藏漸層 */
+}
+
+.desc-container.needs-fade:hover .project-description::after {
+  display: block; /* 懸停時顯示漸層 */
+}
+
+.desc-container.needs-fade .project-description {
+  max-height: 2.8em;
+  overflow: hidden;
+}
+
+.desc-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  white-space: normal;
+  max-width: 400px;
+  word-break: break-word;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+  max-width: 300px;
+  width: max-content;
+}
+
+.desc-container:hover .desc-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-8px);
 }
 
 .project-card:hover {

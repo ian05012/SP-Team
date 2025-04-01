@@ -1,149 +1,137 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SP-HUB | 創建團隊</title>
-    <link rel="stylesheet" href="../../static/css/styles.css">
-    <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SP-HUB | 創建團隊</title>
+  <link rel="stylesheet" href="../../static/css/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
+  <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
 <header class="glass-header" style="padding: 0.5rem 2rem">
-    <nav class="nav-container">
-        <a href="../../" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
-        <form method="GET" action="{% url 'explore' %}" class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" 
-                   class="search-bar" 
-                   name="search_query"
-                   placeholder="搜尋專案、作者或描述..."
-                   value="{{ search_query|default:'' }}">
-            <button type="submit" class="search-btn" style="display: none;"></button>
-        </form>
-        
-        <div class="nav-links">
-            <a href="/post/create_post" class="nav-btn neon-hover active"><i class="fas fa-plus-circle"></i>創建團隊</a>
-            <a href="../explore" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
-            {% if request.user.is_authenticated %}
-                <div class="user-dropdown">
-                    <button class="user-profile nav-btn neon-hover" style="background: var(--primary-green);">
-                        <i class="fas fa-user-astronaut"></i>
-                        <span>{{ request.user.username }}</span>
-                    </button>
-                    <div class="dropdown-content">
-                        <a href="#"><i class="fas fa-cog"></i>個人設定</a>
-                        <a href="/account/logout"><i class="fas fa-sign-out-alt"></i>登出</a>
-                    </div>
-                </div>
-            {% else %}
-                <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
-                <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
-            {% endif %}
+  <nav class="nav-container">
+    <a href="../../" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+    <form method="GET" action="{% url 'explore' %}" class="search-container">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" 
+             class="search-bar" 
+             name="search_query"
+             placeholder="搜尋專案、作者或描述..."
+             value="{{ search_query|default:'' }}">
+      <button type="submit" class="search-btn" style="display: none;"></button>
+    </form>
+    
+    <div class="nav-links">
+      <a href="/post/create_post" class="nav-btn neon-hover active"><i class="fas fa-plus-circle"></i>創建團隊</a>
+      <a href="../../explore" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+      {% if request.user.is_authenticated %}
+      <div class="user-dropdown">
+        <button class="user-profile nav-btn neon-hover" style="background: var(--primary-green);">
+          <i class="fas fa-user-astronaut"></i>
+          <span>{{ request.user.username }}</span>
+        </button>
+        <div class="dropdown-content">
+          <a href="#"><i class="fas fa-cog"></i>個人設定</a>
+          <a href="/account/logout"><i class="fas fa-sign-out-alt"></i>登出</a>
         </div>
-    </nav>
-    <div class="header-gradient"></div>
+      </div>
+      {% else %}
+      <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+      <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+      {% endif %}
+    </div>
+  </nav>
+  <div class="header-gradient"></div>
 </header>
+
 <div class="content" style="margin-top: 2%;">
-    <div class="section-header">
-        <h2 class="section-title" style="text-align: center;">
-            <span class="highlight">創建新團隊</span>
-        </h2>
-        <div class="decorative-line"></div>
-    </div>
+  <div class="section-header">
+    <h2 class="section-title" style="text-align: center;">
+      <span class="highlight">創建新團隊</span>
+    </h2>
+    <div class="decorative-line"></div>
+  </div>
 
-    <div class="form-card">
-
-        <form action="" method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="title"><i class="fas fa-heading"></i> 專案標題</label>
-                <input type="text" id="title" name="title" placeholder="輸入專案標題" required class="form-input">
-            </div>
-            <div class="form-group">
-                <label for="description"><i class="fas fa-comment-alt"></i> 專案簡介</label>
-                <input type="text" id="description" name="description" 
-                       placeholder="簡短描述專案內容（將顯示於搜尋預覽）" 
-                       required class="form-input"
-                       maxlength="80">
-            </div>
-
-            <div class="form-group">
-                <label for="content"><i class="fas fa-pen-fancy"></i> 專案詳情</label>
-                <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
-                <div id="editor">
-                    <p>🚀 專案目標：</p>
-                    <p>在此詳細說明您的專案目標、技術需求與合作方式...</p>
-                    <p><br/></p>
-                </div>
-            </div>
-
-            <button type="submit" class="nav-btn full-width-btn">
-                <i class="fas fa-rocket"></i>
-                <span>發佈專案</span>
-            </button>
-            <!-- Include the Quill library -->
-            <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-            <!-- Initialize Quill editor -->
-            <script>
-
-
-                var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif'];
-                var Font = Quill.import('formats/font');
-                Font.whitelist = fonts;
-                Quill.register(Font, true);
-                const toolbarOptions = [
-                    [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
-                    [{'font': fonts}],
-                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-                    ['blockquote', 'code-block'],
-                    ['link', 'image', 'video'],
-
-                    [{'list': 'ordered'}, {'list': 'bullet'}, {'list': 'check'}],
-
-                    [{'color': []}, {'background': []}],          // dropdown with defaults from theme
-
-                    [{'align': []}],
-                ];
-
-                const quill = new Quill('#editor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: toolbarOptions
-                    },
-                });
-
-
-                document.querySelector('form').addEventListener('submit', function (event) {
-                    // Prevent default form submission to ensure html_content is included
-                    event.preventDefault();
-                    var html_content = quill.root.innerHTML;
-                    // Add the html_content from the editor to a hidden input field
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.setAttribute('type', 'hidden');
-                    hiddenInput.setAttribute('name', 'html_content');
-                    hiddenInput.setAttribute('value', html_content);
-
-                    // Append the hidden input to the form
-                    this.appendChild(hiddenInput);
-
-                    // Submit the form
-                    this.submit();
-                });
-
-            </script>
-
-
-        </form>
-    </div>
+  <div class="form-card">
+    <form action="" method="POST" id="fuck">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="title"><i class="fas fa-heading"></i> 專案標題</label>
+        <input type="text" id="title" name="title" placeholder="輸入專案標題" required class="form-input">
+      </div>
+      <div class="form-group">
+        <label for="description"><i class="fas fa-comment-alt"></i> 專案簡介</label>
+        <input type="text" id="description" name="description" 
+               placeholder="簡短描述專案內容（將顯示於搜尋預覽）" 
+               required class="form-input"
+               maxlength="80">
+      </div>
+      <div class="form-group">
+        <!-- 此 label 改成指向 #editor -->
+        <label for="editor"><i class="fas fa-pen-fancy"></i> 專案詳情</label>
+        <div id="editor">
+          <p>🚀 專案目標：</p>
+          <p>在此詳細說明您的專案目標、技術需求與合作方式...</p>
+          <p><br/></p>
+        </div>
+      </div>
+      <input type="hidden" id="hidden-content" name="content">
+      <button type="submit" class="nav-btn full-width-btn">
+        <i class="fas fa-rocket"></i>
+        <span>發佈專案</span>
+      </button>
+    </form>
+  </div>
 </div>
 
 <footer>
-    <div class="footer" style="text-align: center;">
-        <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
-    </div>
+  <div class="footer" style="text-align: center;">
+    <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
+  </div>
 </footer>
 
+<!-- Include the Quill library -->
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  // 設定字型
+  var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif'];
+  var Font = Quill.import('formats/font');
+  Font.whitelist = fonts;
+  Quill.register(Font, true);
+
+  // 設定工具列選項
+  const toolbarOptions = [
+    [{'size': ['small', false, 'large', 'huge']}],
+    [{'font': fonts}],
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+    ['link', 'image', 'video'],
+    [{'list': 'ordered'}, {'list': 'bullet'}, {'list': 'check'}],
+    [{'color': []}, {'background': []}],
+    [{'align': []}],
+  ];
+
+  // 初始化 Quill 編輯器
+  const quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: toolbarOptions
+    },
+  });
+
+  // 取得表單與隱藏欄位
+  const form = document.querySelector('form');
+  var hiddenInput = document.getElementById('hidden-content'); 
+ 
+  document.addEventListener('submit', function(event) {
+    event.preventDefault();
+    hiddenInput.value = quill.root.innerHTML;
+    document.getElementById('fuck').submit();
+  });
+});
+</script>
 </body>
 </html>

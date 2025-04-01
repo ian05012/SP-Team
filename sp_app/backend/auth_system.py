@@ -19,14 +19,14 @@ def login(request):
         if login_user and login_user.is_active:
             # 登入成功
             auth.login(request, login_user)
-            return redirect('/index')
+            return redirect('/')
         else:
             # 驗證失敗，設定錯誤訊息，停留在登入頁面
             error = '帳號或密碼錯誤！'
 
     # 如果用戶已驗證，則不需要再顯示登入頁
     if request.user.is_authenticated:
-        return redirect('/index')
+        return redirect('/')
 
     # 傳遞錯誤訊息到模板
     return HttpResponse(loader.get_template("../templates/account/login.html").render({'error': error}, request))
@@ -59,4 +59,4 @@ def register(request):
 # 登出
 def logout(request):
     auth.logout(request)
-    return redirect('/index')
+    return redirect('/')

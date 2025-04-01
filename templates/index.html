@@ -68,7 +68,10 @@
                 <i class="fas fa-rocket card-icon" style="color: var(--gold-accent);"></i>
             </div>
             <h3 class="project-title">{{ post.title }}</h3>
-            <p class="project-description">{{ post.description }}</p>
+            <div class="desc-container">
+                <p class="project-description">{{ post.description }}</p>
+                    <div class="desc-tooltip">{{ post.description }}</div>
+            </div>
             <div class="project-meta">
                 <div class="meta-item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
