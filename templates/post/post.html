@@ -73,7 +73,7 @@
             
             <div class="like-section" style="display: flex; gap: 15px;">
                 {% if request.user == post.author %}
-                <button class="del-btn" onclick="confirmDelete('{% url 'delete_post' post.id %}', '文章')" title="刪除文章">
+                <button class="del-btn" onclick="confirmDelete(`{% url 'delete_post' post.id %}`, '文章')" title="刪除文章">
                     <i class="fas fa-trash-alt"></i>
                     <span class="btn-text">刪除</span>
                 </button>
@@ -99,7 +99,7 @@
                                 <span class="comment-time">{{ comment.created|date:"Y/m/d H:i" }}</span>
                                 {% if request.user == comment.author %}
                                 <button class="del-btn" 
-                                        onclick="confirmDelete('{% url 'delete_comment' post.id comment.id %}', 'comment')" 
+                                        onclick="confirmDelete(`{% url 'delete_comment' post.id comment.id %}`, 'comment')" 
                                         title="刪除留言">
                                     <i class="fas fa-trash-alt"></i>
                                     <span class="btn-text">刪除</span>
@@ -111,7 +111,7 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <div class="no-comment">還沒有人留言QQ</div>
+                    <div>還沒有人留言QQ</div>
                 {% endif %}
             </div>
 
