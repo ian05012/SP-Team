@@ -8,7 +8,7 @@
     <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
+    
 <header class="glass-header" style="padding: 0.5rem 2rem">
     <nav class="nav-container">
         <a href="../../" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
@@ -44,6 +44,7 @@
     </nav>
     <div class="header-gradient"></div>
 </header>
+
 <div class="content" style="margin-top: 2%; padding: 0 2rem;">
     <div class="section-header">
         <h2 class="section-title" style="text-align: center;">
@@ -61,15 +62,23 @@
 
         <div class="post-meta glass-card">
             <div class="author-info">
-                
-                <div class="author-details">
+            <div class="author-details" style="display: flex; align-items: center; gap: 1rem; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
                     <h3 class="neon-text">{{ post.author.username }}</h3>
                     <span class="post-time">{{ post.created|date:"Y/m/d H:i" }}</span>
                 </div>
+                
+            </div>
             </div>
             
-            <div class="like-section">
-                <button class="like-btn neon-hover">
+            <div class="like-section" style="display: flex; gap: 15px;">
+                {% if request.user == post.author %}
+                <button class="del-btn" onclick="confirmDelete('{% url 'delete_post' post.id %}', '文章')" title="刪除文章">
+                    <i class="fas fa-trash-alt"></i>
+                    <span class="btn-text">刪除</span>
+                </button>
+                {% endif %}
+                <button class="like-btn">
                     <i class="fas fa-rocket"></i>
                     <span class="like-count">{% if post.likes %}{{ post.likes }}{% else %}0{% endif %}</span>
                 </button>
@@ -78,7 +87,6 @@
 
         <div class="comments-section glass-card">
             <h3 class="section-subtitle neon-text">留言討論區</h3>
-            
 
             <div class="comment-list">
                 {% if comments %}
@@ -86,8 +94,17 @@
                     <div class="comment-item">
                         <div class="comment-content">
                             <div class="comment-header">
+                                <img src="../static/images/default-avatar.png" alt="用戶頭像" class="comment-avatar">
                                 <span class="comment-author neon-text">{{ comment.author.username }}</span>
                                 <span class="comment-time">{{ comment.created|date:"Y/m/d H:i" }}</span>
+                                {% if request.user == comment.author %}
+                                <button class="del-btn" 
+                                        onclick="confirmDelete('{% url 'delete_comment' post.id comment.id %}', 'comment')" 
+                                        title="刪除留言">
+                                    <i class="fas fa-trash-alt"></i>
+                                    <span class="btn-text">刪除</span>
+                                </button>
+                                {% endif %}
                             </div>
                             <p class="comment-text">{{ comment.content }}</p>
                         </div>
@@ -115,5 +132,31 @@
     </div>
 </footer>
 
+<script>
+function confirmDelete(url, type) {
+    if (confirm(`確定要刪除這個${type}嗎？此操作無法復原！`)) {
+        
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+        }).then(response => {
+            if (response.ok) {
+                if(type == 'comment'){
+                    window.location.reload();
+                }else{
+                    window.location.assign('/explore');
+                }
+                
+            } else {
+                alert('刪除失敗，請稍後再試');
+            }
+        });
+    }
+}
+</script>
 </body>
 </html>

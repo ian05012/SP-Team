@@ -748,6 +748,14 @@ body {
     font-size: 0.9em;
 }
 
+.like-section {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    
+}
+
+
 .like-btn {
     background: none;
     border: 1px solid var(--primary-green);
@@ -756,13 +764,25 @@ body {
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .like-btn:hover {
     background: var(--primary-green);
+    color: white;
+}
+.del-btn {
+    color: #FF7575; 
+    border-color: #FF7575;
+    background: none;
+    border: 1px solid;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.del-btn:hover {
+    background: #FF7575;
     color: white;
 }
 

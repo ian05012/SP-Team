@@ -5,6 +5,8 @@ from .models import Post, Comment
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django import forms
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 def explore(request):
     query = request.GET.get('search_query', '')
@@ -91,3 +93,25 @@ def logout(request):
 
 def create_team(request):
     return post_manager.create_team(request)
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user != post.author:
+        return JsonResponse({'error': '無操作權限'}, status=403)
+    try:
+        post.delete()
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'error': f'刪除失敗: {str(e)}'}, status=500)
+
+@login_required
+def delete_comment(request, post_id, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.user != comment.author:
+        return JsonResponse({'error': '無操作權限'}, status=403)
+    try:
+        comment.delete()
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'error': f'刪除失敗: {str(e)}'}, status=500)
