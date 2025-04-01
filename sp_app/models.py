@@ -49,3 +49,15 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    content = models.TextField(default="")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(user, on_delete=models.CASCADE)  # 注意小寫user模型
+    created = models.DateTimeField(auto_now_add=True)  # 字段名與Post一致
+
+    class Meta:
+        ordering = ['-created']  # 使用相同時間字段名稱
+
+    def __str__(self):
+        return f"{self.author.username}的留言"
