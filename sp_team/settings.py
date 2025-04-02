@@ -25,11 +25,16 @@ SECRET_KEY = 'django-insecure-fxswyi-2biw$n&lx3!5#&^_&t5xg#4x!dfvgoh%#!4bi))c2by
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+# 配置錯誤處理器
+HANDLER404 = 'sp_app.views.handler404'
+HANDLER500 = 'sp_app.views.handler500'
 
 
 # Application definition
 LOGIN_REDIRECT_URL = "/index/"
+LOGIN_URL = "/account/login/"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -125,6 +130,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# Media files (User uploaded files)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SP-HUB | 個人資料</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+        }
+        
+        /* 確保所有連結保持原本的顏色 */
+        .profile-container a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 2rem;
+            font-size: 2.5rem;
+            color: #666;
+        }
+        
+        .profile-info {
+            flex-grow: 1;
+        }
+        
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-username {
+            color: var(--warm-gray);
+            margin-bottom: 1rem;
+        }
+        
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+        
+        .profile-section h3 {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-green);
+            display: inline-block;
+        }
+        
+        .profile-field {
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-field label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-field p {
+            padding: 0.5rem 0;
+        }
+        
+        .profile-field textarea,
+        .profile-field input,
+        .profile-field select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .profile-field textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .edit-profile-btn {
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .edit-profile-btn:hover {
+            background-color: var(--secondary-green);
+        }
+        
+        .edit-mode .view-only {
+            display: none;
+        }
+        
+        .view-mode .edit-only {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="glass-header" style="padding: 0.5rem 2rem">
+
+        <nav class="nav-container">
+            <a href="{% url 'index' %}" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+            
+            <form method="GET" action="{% url 'explore' %}" class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" 
+                       class="search-bar" 
+                       name="search_query"
+                       placeholder="搜尋專案、作者或描述..."
+                       value="{{ search_query|default:'' }}">
+                <button type="submit" class="search-btn" style="display: none;"></button>
+            </form>
+            <div class="nav-links">
+                <a href="{% url 'create_post' %}" class="header-nav-btn neon-hover"><i class="fas fa-plus-circle"></i>發布文章</a>
+                <a href="{% url 'explore' %}" class="header-nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+    
+                {% if request.user.is_authenticated %}
+                    <div class="user-dropdown">
+                        <button class="user-profile header-nav-btn neon-hover" style="background: var(--primary-green); color: white;">
+                            {% if request.user.avatar %}
+                                <img src="{{ request.user.avatar.url }}" alt="{{ request.user.username }}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                            {% else %}
+                                <i class="fas fa-user-astronaut"></i>
+                            {% endif %}
+                            <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
+                            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>登出</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="header-nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+                    <a href="{% url 'register' %}" class="header-nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="header-gradient"></div>
+    </header>
+    
+<div class="content">
+    <div class="section-header">
+        <h2 class="section-title" style="text-align: center;">
+            <span class="highlight">個人資料</span>
+        </h2>
+        <div class="decorative-line"></div>
+    </div>
+
+    <div class="profile-container {% if edit_mode %}edit-mode{% else %}view-mode{% endif %}">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert-message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if not edit_mode %}
+        <div class="profile-header">
+            <div class="profile-avatar">
+                {% if user_data.avatar %}
+                    <img src="{{ user_data.avatar.url }}" alt="用戶頭像" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                {% else %}
+                    <i class="fas fa-user"></i>
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name">{{ user_data.name|default:user_data.username }}</h2>
+                <p class="profile-username">@<a href="{% url 'profile_with_username' user_data.username %}" style="text-decoration: none; color: inherit;">{{ user_data.username }}</a></p>
+                {% if is_own_profile %}
+                <form method="POST" enctype="multipart/form-data" class="edit-only">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="avatar">頭像</label>
+                        <input type="file" name="avatar" id="avatar" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">用戶名</label>
+                        <input type="text" name="username" id="username" value="{{ user_data.username }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">電子郵件</label>
+                        <input type="email" name="email" id="email" value="{{ user_data.email }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="custom_site_name">個人網站名稱</label>
+                        <input type="text" name="custom_site_name" id="custom_site_name" value="{{ user_data.custom_site_name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="custom_site_url">個人網站網址</label>
+                        <input type="url" name="custom_site_url" id="custom_site_url" value="{{ user_data.custom_site_url }}">
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="submit-btn">保存更改</button>
+                    </div>
+                </form>
+                <div class="view-only">
+                    <a href="?edit=true" class="edit-profile-btn" style="color: #ddd;">
+                        <i class="fas fa-edit"></i> 編輯個人資料
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {%endif%}
+        {% if edit_mode %}
+        <form method="POST" class="edit-only" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="profile-section">
+                <h3>基本資料</h3>
+                
+                <div class="profile-field">
+                    <label for="avatar">頭像</label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*">
+                    {% if user_data.avatar %}
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--warm-gray);">當前頭像: {{ user_data.avatar.name }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="profile-field">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" name="name" value="{{ user_data.name }}" required>
+                </div>
+                
+                <div class="profile-field">
+                    <label for="gender">性別</label>
+                    <select id="gender" name="gender">
+                        <option value="男" {% if user_data.gender == '男' %}selected{% endif %}>男</option>
+                        <option value="女" {% if user_data.gender == '女' %}selected{% endif %}>女</option>
+                        <option value="其他" {% if user_data.gender == '其他' %}selected{% endif %}>其他</option>
+                    </select>
+                </div>
+                
+                <div class="profile-field">
+                    <label for="birthday">生日</label>
+                    <input type="date" id="birthday" name="birthday" value="{{ user_data.birthday|date:'Y-m-d' }}">
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h3>個人簡介</h3>
+                
+                <div class="profile-field">
+                    <label for="description">自我介紹</label>
+                    <textarea id="description" name="description">{{ user_data.description }}</textarea>
+                </div>
+                
+                <div class="profile-field">
+                    <label for="github">GitHub</label>
+                    <input type="url" id="github" name="github" value="{{ user_data.github }}" placeholder="https://github.com/yourusername">
+                </div>
+                
+                <div class="profile-field">
+                    <label for="instagram">Instagram</label>
+                    <input type="url" id="instagram" name="instagram" value="{{ user_data.instagram }}" placeholder="https://instagram.com/yourusername">
+                </div>
+                
+                <div class="profile-field">
+                    <label for="line">Line ID</label>
+                    <input type="text" id="line" name="line" value="{{ user_data.line }}" placeholder="您的Line ID">
+                </div>
+                
+                <div class="profile-field">
+                    <label for="custom_site_name">自定義網站名稱</label>
+                    <input type="text" id="custom_site_name" name="custom_site_name" value="{{ user_data.custom_site_name }}" placeholder="例如：個人部落格、作品集等">
+                </div>
+                
+                <div class="profile-field">
+                    <label for="custom_site_url">自定義網站連結</label>
+                    <input type="url" id="custom_site_url" name="custom_site_url" value="{{ user_data.custom_site_url }}" placeholder="https://example.com">
+                </div>
+            </div>
+            
+            <div class="profile-field">
+                <button type="submit" class="edit-profile-btn">儲存變更</button>
+                <a href="{% url 'profile' %}" style="margin-left: 1rem; text-decoration: none; color: var(--warm-gray);">
+                    取消
+                </a>
+            </div>
+        </form>
+        {% else %}
+        <div class="view-only">
+            <div class="profile-section">
+                <h3>基本資料</h3>
+                
+                <div class="profile-field">
+                    <label>姓名</label>
+                    <p>{{ user_data.name }}</p>
+                </div>
+                
+                <div class="profile-field">
+                    <label>性別</label>
+                    <p>{{ user_data.gender }}</p>
+                </div>
+                
+                <div class="profile-field">
+                    <label>生日</label>
+                    <p>{{ user_data.birthday|date:"Y年m月d日" }}</p>
+                </div>
+                
+                <div class="profile-field">
+                    <label>加入時間</label>
+                    <p>{{ user_data.created|date:"Y年m月d日" }}</p>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h3>個人簡介</h3>
+                
+                <div class="profile-field">
+                    <label>自我介紹</label>
+                    <p>{{ user_data.description }}</p>
+                </div>
+                
+                <div class="profile-field">
+                    <label>社交媒體</label>
+                    <div style="margin-top: 0.5rem;">
+                        {% if user_data.github %}
+                            <a href="{{ user_data.github }}" target="_blank" style="display: inline-block; margin-right: 1rem;">
+                                <i class="fab fa-github" style="font-size: 1.5rem;"></i>
+                            </a>
+                        {% endif %}
+                        
+                        {% if user_data.instagram %}
+                            <a href="{{ user_data.instagram }}" target="_blank" style="display: inline-block; margin-right: 1rem;">
+                                <i class="fab fa-instagram" style="font-size: 1.5rem;"></i>
+                            </a>
+                        {% endif %}
+                        
+                        {% if user_data.line %}
+                            <div style="display: inline-block;">
+                                <i class="fab fa-line" style="font-size: 1.5rem;"></i>
+                                <span style="margin-left: 0.3rem;">{{ user_data.line }}</span>
+                            </div>
+                        {% endif %}
+                        
+                        {% if user_data.custom_site_name and user_data.custom_site_url %}
+                            <a href="{{ user_data.custom_site_url }}" target="_blank" style="display: inline-block; margin-right: 1rem;">
+                                <i class="fas fa-globe" style="font-size: 1.5rem;"></i>
+                                <span style="margin-left: 0.3rem;">{{ user_data.custom_site_name }}</span>
+                            </a>
+                        {% endif %}
+                        
+                        {% if not user_data.github and not user_data.instagram and not user_data.line and not user_data.custom_site_url %}
+                            <p>未設置社交媒體連結</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 用戶發布的文章 -->
+            <div class="profile-section">
+                <h3>發布的文章</h3>
+                
+                <!-- 分類標籤 -->
+                <div style="display: flex; margin-bottom: 20px;">
+                    <a href="#team-posts" class="nav-btn neon-hover active" style="margin-right: 10px;" onclick="showTab('team-posts', this); return false;">團隊招募</a>
+                    <a href="#project-posts" class="nav-btn neon-hover" style="margin-right: 10px;" onclick="showTab('project-posts', this); return false;">作品分享</a>
+                </div>
+                
+                <!-- 團隊招募文章 -->
+                <div id="team-posts" class="post-tab">
+                    {% with team_posts=user_data.post_set.all|dictsortreversed:"created" %}
+                    {% if team_posts %}
+                    <div class="project-list">
+                        {% for post in team_posts %}
+                        {% if post.post_type == "team" %}
+                        <div class="project-item">
+                            <a href="{% url 'post_detail' post.id %}" class="project-link" style="text-decoration: none; color: inherit;">
+                                <h3 class="project-title">{{ post.title }}</h3>
+                                <p class="project-description">{{ post.description }}</p>
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>尚未發布任何團隊招募文章</p>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                
+                <!-- 作品分享文章 -->
+                <div id="project-posts" class="post-tab" style="display: none;">
+                    {% with project_posts=user_data.post_set.all|dictsortreversed:"created" %}
+                    {% if project_posts %}
+                    <div class="project-list">
+                        {% for post in project_posts %}
+                        {% if post.post_type == "project" %}
+                        <div class="project-item">
+                            <a href="{% url 'post_detail' post.id %}" class="project-link" style="text-decoration: none; color: inherit;">
+                                <h3 class="project-title">{{ post.title }}</h3>
+                                <p class="project-description">{{ post.description }}</p>
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>尚未發布任何作品分享文章</p>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2023 SP-HUB. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+    // 處理分類標籤切換
+    function showTab(tabId, clickedElement) {
+        // 隱藏所有標籤內容
+        document.querySelectorAll('.post-tab').forEach(function(tab) {
+            tab.style.display = 'none';
+        });
+        
+        // 顯示選中的標籤內容
+        document.getElementById(tabId).style.display = 'block';
+        
+        // 更新標籤按鈕狀態
+        document.querySelectorAll('.nav-btn').forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        clickedElement.classList.add('active');
+    }
+    
+    // 頁面加載時的其他交互效果
+    document.addEventListener('DOMContentLoaded', function() {
+        // 確保默認顯示第一個標籤
+        document.getElementById('team-posts').style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
+
+<style>
+    /* 修改專案列表樣式 */
+    .project-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .project-item {
+        padding: 1rem;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+    
+    .project-item:hover {
+        box-shadow: var(--shadow-soft);
+    }
+    
+    .project-item .project-title {
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+    }
+    
+    .project-item .project-description {
+        color: var(--warm-gray);
+        font-size: 0.95rem;
+        margin: 0;
+    }
+</style>
+
+<style>
+    /* 修改分類標籤按鈕樣式 */
+    .profile-section .nav-btn {
+        border: 1px solid var(--primary-green);
+        background-color: transparent;
+        color: var(--primary-green);
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+    }
+
+    .profile-section .nav-btn:hover,
+    .profile-section .nav-btn.active {
+        background-color: var(--primary-green);
+        color: white;
+    }
+</style>

@@ -1,7 +1,8 @@
 from django.shortcuts import redirect, render
-from sp_app.models import Post
+from sp_app.models import Post, Tag
+import json
 
-def create_team(request):
+def create_post(request):
     if not request.user.is_authenticated:
         return redirect('/account/login')
 
@@ -13,7 +14,18 @@ def create_team(request):
         print("Received HTML content:", html_content)
         new_post.content = html_content
         new_post.author = request.user
+        new_post.post_type = request.POST.get('post_type', 'team')
         new_post.save()
+        
+        # 處理標籤
+        tags_json = request.POST.get('tags', '[]')
+        try:
+            tag_names = json.loads(tags_json)
+            for tag_name in tag_names:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                new_post.tags.add(tag)
+        except json.JSONDecodeError:
+            pass
         return redirect('/')    
 
     return render(request, 'post/create_post.html')

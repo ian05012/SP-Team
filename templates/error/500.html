@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SP-HUB | 服務器錯誤</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
+    <style>
+        .error-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .error-icon {
+            font-size: 5rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-green);
+            color: white;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <header class="glass-header" style="padding: 0.5rem 2rem">
+        <nav class="nav-container">
+            <a href="{% url 'index' %}" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        </nav>
+        <div class="header-gradient"></div>
+    </header>
+
+    <div class="error-container">
+        <i class="fas fa-exclamation-triangle error-icon"></i>
+        <h1 class="error-title">服務器錯誤</h1>
+        <p class="error-message">抱歉，服務器出現了一些問題。我們的技術團隊已經收到通知，正在努力修復中。</p>
+        <a href="{% url 'index' %}" class="home-btn">
+            <i class="fas fa-home"></i>
+            返回首頁
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer" style="text-align: center;">
+            <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

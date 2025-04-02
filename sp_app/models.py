@@ -18,14 +18,17 @@ class UserManager(BaseUserManager):
         return self.create_user(username, password, **extra_fields)
 
 class user(AbstractUser):
-    objects = UserManager()
+
     name = models.TextField(default="")
     gender = models.TextField(default="男")
     description = models.TextField(default="這個人很懶，還沒留下任何東西~")
-    skill = models.TextField(default="什麼都不會")
+    github = models.URLField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    line = models.TextField(blank=True, null=True)
+    custom_site_name = models.TextField(blank=True, null=True)
+    custom_site_url = models.URLField(blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     birthday = models.DateTimeField(auto_now_add=True)
-    headshot = models.TextField(default="")
-    education = models.TextField(default="")
     created = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'username'
@@ -34,7 +37,20 @@ class user(AbstractUser):
     def __str__(self):
         return self.username
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 class Post(models.Model):
+    # 文章類型選項
+    TYPE_CHOICES = (
+        ('team', '團隊招募'),
+        ('project', '作品分享'),
+    )
+    
     title = models.TextField(default="")
     description = models.TextField(default="")
     content = models.TextField(default="")
@@ -43,12 +59,22 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     likes = models.IntegerField(default=0)
     watched = models.IntegerField(default=0)
+    tags = models.ManyToManyField(Tag, blank=True)
+    post_type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='team')
 
     def someone_watched(self):
        self.watched+=1
 
     def __str__(self):
         return self.title
+
+class UserLike(models.Model):
+    user = models.ForeignKey(user, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'post')  # 確保一個用戶只能對一篇文章按一次讚
 
 class Comment(models.Model):
     content = models.TextField(default="")

@@ -1,17 +1,29 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SP-HUB | 會員登入</title>
-    <link rel="stylesheet" href="../../static/css/styles.css">
+    <title>SP-HUB | 登入</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
+    <style>
+        .decorative-line{
+            width: 0%;
+            height: 1px;
+            background-color: #ccc;
+            margin: 10px auto;
+        }
+    </style>
 </head>
 <body>
 
 <header class="glass-header" style="padding: 0.5rem 2rem">
+
     <nav class="nav-container">
-        <a href="../../" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        <a href="{% url 'index' %}" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        
         <form method="GET" action="{% url 'explore' %}" class="search-container">
             <i class="fas fa-search search-icon"></i>
             <input type="text" 
@@ -21,11 +33,25 @@
                    value="{{ search_query|default:'' }}">
             <button type="submit" class="search-btn" style="display: none;"></button>
         </form>
-        
         <div class="nav-links">
-            <a href="/post/create_post" class="nav-btn neon-hover"><i class="fas fa-plus-circle"></i>創建團隊</a>
-            <a href="../../explore" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
-            <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+            <a href="{% url 'create_post' %}" class="header-nav-btn neon-hover"><i class="fas fa-plus-circle"></i>發布文章</a>
+            <a href="{% url 'explore' %}" class="header-nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+
+            {% if request.user.is_authenticated %}
+                <div class="user-dropdown">
+                    <button class="user-profile header-nav-btn neon-hover" style="background: transparent;">
+                        <i class="fas fa-user-astronaut"></i>
+                        <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
+                        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>登出</a>
+                    </div>
+                </div>
+            {% else %}
+                
+                <a href="{% url 'register' %}" class="header-nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+            {% endif %}
         </div>
     </nav>
     <div class="header-gradient"></div>
@@ -66,7 +92,7 @@
 
         <div class="auth-link">
             <span>尚未成為會員？</span>
-            <a href="/account/register" class="neon-hover">立即註冊</a>
+            <a href="{% url 'register' %}" class="neon-hover">立即註冊</a>
     </div>
 </main>
 

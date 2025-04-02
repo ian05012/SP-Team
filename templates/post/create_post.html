@@ -4,62 +4,121 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SP-HUB | 創建團隊</title>
-  <link rel="stylesheet" href="../../static/css/styles.css">
+  {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
   <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
+  <style>
+    .tag-container {
+      margin-top: 10px;
+    }
+    .selected-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .tag {
+      background-color: rgba(42, 45, 67, 0.7); /* 使用#2A2D43的RGB值並設置0.7透明度 */
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      animation: tagPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s ease;
+    }
+    .tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .tag-remove {
+      cursor: pointer;
+      font-size: 12px;
+    }
+    @keyframes tagPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
 </head>
 <body>
 
-<header class="glass-header" style="padding: 0.5rem 2rem">
-  <nav class="nav-container">
-    <a href="../../" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
-    <form method="GET" action="{% url 'explore' %}" class="search-container">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" 
-             class="search-bar" 
-             name="search_query"
-             placeholder="搜尋專案、作者或描述..."
-             value="{{ search_query|default:'' }}">
-      <button type="submit" class="search-btn" style="display: none;"></button>
-    </form>
-    
-    <div class="nav-links">
-      <a href="/post/create_post" class="nav-btn neon-hover active"><i class="fas fa-plus-circle"></i>創建團隊</a>
-      <a href="../../explore" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
-      {% if request.user.is_authenticated %}
-      <div class="user-dropdown">
-        <button class="user-profile nav-btn neon-hover" style="background: var(--primary-green);">
-          <i class="fas fa-user-astronaut"></i>
-          <span>{{ request.user.username }}</span>
-        </button>
-        <div class="dropdown-content">
-          <a href="#"><i class="fas fa-cog"></i>個人設定</a>
-          <a href="/account/logout"><i class="fas fa-sign-out-alt"></i>登出</a>
+  <header class="glass-header" style="padding: 0.5rem 2rem">
+
+    <nav class="nav-container">
+        <a href="{% url 'index' %}" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+        
+        <form method="GET" action="{% url 'explore' %}" class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" 
+                   class="search-bar" 
+                   name="search_query"
+                   placeholder="搜尋專案、作者或描述..."
+                   value="{{ search_query|default:'' }}">
+            <button type="submit" class="search-btn" style="display: none;"></button>
+        </form>
+        <div class="nav-links">
+            <a href="{% url 'create_post' %}" class="header-nav-btn neon-hover"><i class="fas fa-plus-circle"></i>發布文章</a>
+            <a href="{% url 'explore' %}" class="header-nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+
+            {% if request.user.is_authenticated %}
+                <div class="user-dropdown">
+                    <button class="user-profile header-nav-btn neon-hover" style="background: var(--primary-green); color: white;">
+                        {% if request.user.avatar %}
+                            <img src="{{ request.user.avatar.url }}" alt="{{ request.user.username }}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            <i class="fas fa-user-astronaut"></i>
+                        {% endif %}
+                        <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
+                        <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>登出</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="header-nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+                <a href="{% url 'register' %}" class="header-nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+            {% endif %}
         </div>
-      </div>
-      {% else %}
-      <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
-      <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
-      {% endif %}
-    </div>
-  </nav>
-  <div class="header-gradient"></div>
+    </nav>
+    <div class="header-gradient"></div>
 </header>
 
 <div class="content" style="margin-top: 2%;">
   <div class="section-header">
     <h2 class="section-title" style="text-align: center;">
-      <span class="highlight">創建新團隊</span>
+      <span class="highlight">發布文章</span>
     </h2>
     <div class="decorative-line"></div>
   </div>
 
   <div class="form-card">
-    <form action="" method="POST" id="fuck">
+    <form action="" method="POST" id="post-form">
       {% csrf_token %}
       <div class="form-group">
-        <label for="title"><i class="fas fa-heading"></i> 專案標題</label>
-        <input type="text" id="title" name="title" placeholder="輸入專案標題" required class="form-input">
+        <label for="post_type"><i class="fas fa-file-alt"></i> 文章類型</label>
+        <select id="post_type" name="post_type" class="form-input">
+          <option value="team">團隊招募</option>
+          <option value="project">作品分享</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="title"><i class="fas fa-heading"></i> 標題</label>
+        <input type="text" id="title" name="title" placeholder="輸入標題" required class="form-input">
       </div>
       <div class="form-group">
         <label for="description"><i class="fas fa-comment-alt"></i> 專案簡介</label>
@@ -67,6 +126,14 @@
                placeholder="簡短描述專案內容（將顯示於搜尋預覽）" 
                required class="form-input"
                maxlength="80">
+      </div>
+      <div class="form-group">
+        <label for="tags"><i class="fas fa-tags"></i> 專案標籤</label>
+        <div class="tag-container">
+          <input type="text" id="tag-input" placeholder="輸入標籤（最多3個）" class="form-input">
+          <div id="selected-tags" class="selected-tags"></div>
+          <input type="hidden" id="tags" name="tags" required>
+        </div>
       </div>
       <div class="form-group">
         <!-- 此 label 改成指向 #editor -->
@@ -80,7 +147,7 @@
       <input type="hidden" id="hidden-content" name="content">
       <button type="submit" class="nav-btn full-width-btn">
         <i class="fas fa-rocket"></i>
-        <span>發佈專案</span>
+        <span>發佈文章</span>
       </button>
     </form>
   </div>
@@ -96,6 +163,77 @@
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
+  // 標籤相關功能
+  const tagInput = document.getElementById('tag-input');
+  const selectedTags = document.getElementById('selected-tags');
+  const tagsHidden = document.getElementById('tags');
+  let tags = [];
+
+  tagInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const tag = this.value.trim();
+      if (tag && tags.length < 3 && !tags.includes(tag)) {
+        addTag(tag);
+      }
+      this.value = '';
+    }
+  });
+  
+  // 監聽空格鍵，處理#開頭的標籤
+  tagInput.addEventListener('input', function(e) {
+    const value = this.value;
+    if (value.startsWith('') && value.endsWith(' ')) {
+      const tag = value.slice(0, -1).trim(); // 移除#和空格
+      if (tag && tags.length < 3 && !tags.includes(tag)) {
+        addTag(tag);
+        this.value = '';
+      }
+    }
+  });
+  
+  // 也監聽空格鍵按下事件，確保即使用戶直接按空格也能觸發
+  tagInput.addEventListener('keydown', function(e) {
+    if (e.key === ' ' && this.value.startsWith('#')) {
+      const tag = this.value.slice(1).trim();
+      if (tag && tags.length < 3 && !tags.includes(tag)) {
+        e.preventDefault(); // 防止空格被輸入
+        addTag(tag);
+        this.value = '';
+      }
+    }
+  });
+
+  function addTag(tag) {
+    // 保存完整標籤內容，但在顯示時可能會截斷
+    tags.push(tag);
+    updateTags();
+  }
+
+  function removeTag(tag) {
+    tags = tags.filter(t => t !== tag);
+    updateTags();
+  }
+
+  function updateTags() {
+    selectedTags.innerHTML = tags.map(tag => {
+      // 顯示時如果標籤太長則截斷，但保存完整內容
+      const displayTag = tag.length > 15 ? tag.substring(0, 12) + '...' : tag;
+      return `
+      <span class="tag" title="${tag}">
+        #${displayTag}
+        <span class="tag-remove" onclick="removeTag('${tag}')">✕</span>
+      </span>
+      `;
+    }).join('');
+    tagsHidden.value = JSON.stringify(tags);
+    tagInput.disabled = tags.length >= 3;
+    tagInput.placeholder = tags.length >= 3 ? '已達到最大標籤數量' : '輸入標籤（最多3個）';
+  }
+
+  // 將removeTag函數設為全局函數
+  window.removeTag = removeTag;
+
   // 設定字型
   var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif'];
   var Font = Quill.import('formats/font');
@@ -123,13 +261,13 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   // 取得表單與隱藏欄位
-  const form = document.querySelector('form');
+  const form = document.getElementById('post-form');
   var hiddenInput = document.getElementById('hidden-content'); 
  
-  document.addEventListener('submit', function(event) {
+  form.addEventListener('submit', function(event) {
     event.preventDefault();
     hiddenInput.value = quill.root.innerHTML;
-    document.getElementById('fuck').submit();
+    form.submit();
   });
 });
 </script>

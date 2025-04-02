@@ -4,46 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SP-HUB | 專案詳情</title>
-    <link rel="stylesheet" href="../../static/css/styles.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
+    <style>
+        .like-btn {
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: none;
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+        
+        .like-btn:hover {
+            background-color: #f1f3f5;
+        }
+        
+        .like-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .like-btn .fa-rocket {
+            transition: all 0.3s ease;
+        }
+        
+        .like-btn:hover .fa-rocket {
+            transform: translateY(-2px);
+        }
+        
+        .liked .fa-rocket {
+            color: #ff6b6b !important;
+        }
+    </style>
 </head>
 <body>
     
-<header class="glass-header" style="padding: 0.5rem 2rem">
-    <nav class="nav-container">
-        <a href="../../" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
-        <form method="GET" action="{% url 'explore' %}" class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" 
-                   class="search-bar" 
-                   name="search_query"
-                   placeholder="搜尋專案、作者或描述..."
-                   value="{{ search_query|default:'' }}">
-            <button type="submit" class="search-btn" style="display: none;"></button>
-        </form>
-        
-        <div class="nav-links">
-            <a href="/post/create_post" class="nav-btn neon-hover"><i class="fas fa-plus-circle"></i>創建團隊</a>
-            <a href="../../explore" class="nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
-            {% if request.user.is_authenticated %}
-                <div class="user-dropdown">
-                    <button class="user-profile nav-btn neon-hover" style="background: var(--primary-green);">
-                        <i class="fas fa-user-astronaut"></i>
-                        <span>{{ request.user.username }}</span>
-                    </button>
-                    <div class="dropdown-content">
-                        <a href="#"><i class="fas fa-cog"></i>個人設定</a>
-                        <a href="/account/logout"><i class="fas fa-sign-out-alt"></i>登出</a>
+    <header class="glass-header" style="padding: 0.5rem 2rem">
+
+        <nav class="nav-container">
+            <a href="{% url 'index' %}" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+            
+            <form method="GET" action="{% url 'explore' %}" class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" 
+                       class="search-bar" 
+                       name="search_query"
+                       placeholder="搜尋專案、作者或描述..."
+                       value="{{ search_query|default:'' }}">
+                <button type="submit" class="search-btn" style="display: none;"></button>
+            </form>
+            <div class="nav-links">
+                <a href="{% url 'create_post' %}" class="header-nav-btn neon-hover"><i class="fas fa-plus-circle"></i>發布文章</a>
+                <a href="{% url 'explore' %}" class="header-nav-btn neon-hover"><i class="fas fa-users"></i>探索團隊</a>
+    
+                {% if request.user.is_authenticated %}
+                    <div class="user-dropdown">
+                        <button class="user-profile header-nav-btn neon-hover" style="background: var(--primary-green); color: white;">
+                            {% if request.user.avatar %}
+                                <img src="{{ request.user.avatar.url }}" alt="{{ request.user.username }}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;">
+                            {% else %}
+                                <i class="fas fa-user-astronaut"></i>
+                            {% endif %}
+                            <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
+                            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>登出</a>
+                        </div>
                     </div>
-                </div>
-            {% else %}
-                <a href="/account/login" class="nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
-                <a href="/account/register" class="nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
-            {% endif %}
-        </div>
-    </nav>
-    <div class="header-gradient"></div>
-</header>
+                {% else %}
+                    <a href="{% url 'login' %}" class="header-nav-btn neon-hover"><i class="fas fa-sign-in-alt"></i>登入</a>
+                    <a href="{% url 'register' %}" class="header-nav-btn neon-hover"><i class="fas fa-user-plus"></i>註冊</a>
+                {% endif %}
+            </div>
+        </nav>
+        <div class="header-gradient"></div>
+    </header>
 
 <div class="content" style="margin-top: 2%; padding: 0 2rem;">
     <div class="section-header">
@@ -62,9 +103,15 @@
 
         <div class="post-meta glass-card">
             <div class="author-info">
+            
+            {% if post.author.avatar %}
+                <img src="{{ post.author.avatar.url }}" alt="用戶頭像" class="author-avatar">
+            {% else %}
+                <i class="fas fa-user-circle author-avatar" style="font-size: 2rem;"></i>
+            {% endif %}
             <div class="author-details" style="display: flex; align-items: center; gap: 1rem; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <h3 class="neon-text">{{ post.author.username }}</h3>
+                    <h3 class="neon-text"><a href="{% url 'profile_with_username' post.author.username %}" style="text-decoration: none; color: inherit;">{{ post.author.username }}</a></h3>
                     <span class="post-time">{{ post.created|date:"Y/m/d H:i" }}</span>
                 </div>
                 
@@ -78,10 +125,18 @@
                     <span class="btn-text">刪除</span>
                 </button>
                 {% endif %}
-                <button class="like-btn">
-                    <i class="fas fa-rocket"></i>
-                    <span class="like-count">{% if post.likes %}{{ post.likes }}{% else %}0{% endif %}</span>
+                <button class="like-btn" id="likeButton" {% if not request.user.is_authenticated %}disabled{% endif %}>
+                    <i class="fa-solid fa-heart" id="likeIcon" {% if user_liked %}style="color: #ff6b6b;"{% endif %}></i>
+                    <span class="like-count" id="likeCount">{% if post.likes %}{{ post.likes }}{% else %}0{% endif %}</span>
                 </button>
+                
+                <div class="tech-stack">
+                    {% for tag in post.tags.all %}
+                    {% with display_tag=tag.name|truncatechars:15 %}
+                    <span class="tech-tag" title="#{{ tag.name }}">#{{ display_tag }}</span>
+                    {% endwith %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
@@ -94,8 +149,12 @@
                     <div class="comment-item">
                         <div class="comment-content">
                             <div class="comment-header">
-                                <img src="../static/images/default-avatar.png" alt="用戶頭像" class="comment-avatar">
-                                <span class="comment-author neon-text">{{ comment.author.username }}</span>
+                                {% if comment.author.avatar %}
+                                <img src="{{ comment.author.avatar.url }}" alt="用戶頭像" class="comment-avatar">
+                                {% else %}
+                                <i class="fas fa-user-circle comment-avatar" style="font-size: 2rem;"></i>
+                                {% endif %}
+                                <span class="comment-author neon-text"><a href="{% url 'profile_with_username' comment.author.username %}" style="text-decoration: none; color: inherit;">{{ comment.author.username }}</a></span>
                                 <span class="comment-time">{{ comment.created|date:"Y/m/d H:i" }}</span>
                                 {% if request.user == comment.author %}
                                 <button class="del-btn" 
@@ -157,6 +216,50 @@ function confirmDelete(url, type) {
         });
     }
 }
+
+// 按讚功能
+document.addEventListener('DOMContentLoaded', function() {
+    const likeButton = document.getElementById('likeButton');
+    const likeIcon = document.getElementById('likeIcon');
+    const likeCount = document.getElementById('likeCount');
+    
+    {% if request.user.is_authenticated %}
+    // 使用從後端傳來的user_liked變量初始化按鈕狀態
+    {% if user_liked %}
+    likeIcon.style.color = '#ff6b6b';
+    {% endif %}
+    
+    // 添加按讚事件處理器
+    likeButton.addEventListener('click', function() {
+        if (!likeButton.disabled) {
+            fetch(`{% url 'toggle_like' post.id %}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 更新按讚計數
+                likeCount.textContent = data.likes_count;
+                
+                // 更新按鈕樣式
+                if (data.liked) {
+                    likeIcon.style.color = '#ff6b6b';
+                } else {
+                    likeIcon.style.color = '';
+                }
+            })
+            .catch(error => console.error('Error toggling like:', error));
+        }
+    });
+    {% else %}
+    // 未登入用戶的按鈕提示
+    likeButton.title = '請登入後再按讚';
+    {% endif %}
+});
 </script>
 </body>
 </html>

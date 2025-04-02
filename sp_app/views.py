@@ -8,8 +8,12 @@ from django import forms
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
+def handler404(request, exception):
+    return render(request, 'error/404.html', status=404)
+
 def explore(request):
     query = request.GET.get('search_query', '')
+    post_type = request.GET.get('type', 'all')
     post_list = Post.objects.all().order_by('created').reverse()
     
     if query:
@@ -18,6 +22,9 @@ def explore(request):
             Q(author__username__icontains=query) |
             Q(description__icontains=query)
         )
+    
+    if post_type and post_type != 'all':
+        post_list = post_list.filter(post_type=post_type)
     
     paginator = Paginator(post_list, 10)  # 每頁顯示10個項目
     page_number = request.GET.get('page')
@@ -62,11 +69,18 @@ def post_detail(request, post_id):
     comments = post.comments.all()
     form = CommentForm()
     
+    # 檢查用戶是否已經按過讚
+    user_liked = False
+    if request.user.is_authenticated:
+        from .models import UserLike
+        user_liked = UserLike.objects.filter(user=request.user, post=post).exists()
+    
     context = {
         'post': post,
         'comments': comments,
         'comment_form': form,
         'comments_count': comments.count(),
+        'user_liked': user_liked,
     }
     return render(request, 'post/post.html', context)
 
@@ -91,8 +105,8 @@ def logout(request):
     return auth_system.logout(request)
 
 
-def create_team(request):
-    return post_manager.create_team(request)
+def create_post(request):
+    return post_manager.create_post(request)
 
 @login_required
 def delete_post(request, post_id):
@@ -115,3 +129,94 @@ def delete_comment(request, post_id, comment_id):
         return JsonResponse({'success': True})
     except Exception as e:
         return JsonResponse({'error': f'刪除失敗: {str(e)}'}, status=500)
+
+@login_required
+def toggle_like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    from .models import UserLike
+    
+    # 檢查用戶是否已經按過讚
+    like_exists = UserLike.objects.filter(user=request.user, post=post).exists()
+    
+    if like_exists:
+        # 如果已經按過讚，則取消讚
+        UserLike.objects.filter(user=request.user, post=post).delete()
+        post.likes -= 1
+        post.save()
+        return JsonResponse({'liked': False, 'likes_count': post.likes})
+    else:
+        # 如果沒有按過讚，則添加讚
+        UserLike.objects.create(user=request.user, post=post)
+        post.likes += 1
+        post.save()
+        return JsonResponse({'liked': True, 'likes_count': post.likes})
+
+def check_like(request, post_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'liked': False})
+        
+    post = get_object_or_404(Post, id=post_id)
+    from .models import UserLike
+    
+    # 檢查用戶是否已經按過讚
+    like_exists = UserLike.objects.filter(user=request.user, post=post).exists()
+    
+    return JsonResponse({'liked': like_exists})
+@login_required
+def profile(request, username=None):
+    """
+    用戶個人資料頁面
+    """
+    if username:
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        user_data = get_object_or_404(User, username=username)
+        is_own_profile = request.user == user_data
+    else:
+        user_data = request.user
+        is_own_profile = True
+    
+    edit_mode = request.GET.get('edit', 'false').lower() == 'true'
+    
+    if request.method == 'POST' and is_own_profile:
+        # 處理表單提交
+        user_data.username = request.POST.get('username', user_data.username)
+        user_data.email = request.POST.get('email', user_data.email)
+        user_data.custom_site_name = request.POST.get('custom_site_name', '')
+        user_data.custom_site_url = request.POST.get('custom_site_url', '')
+        user_data.name = request.POST.get('name', '')
+        user_data.gender = request.POST.get('gender', '')
+        user_data.birthday = request.POST.get('birthday', None)
+        user_data.description = request.POST.get('description', '')
+        user_data.github = request.POST.get('github', '')
+        user_data.instagram = request.POST.get('instagram', '')
+        user_data.line = request.POST.get('line', '')
+        
+        # 處理頭像上傳
+        if 'avatar' in request.FILES:
+            user_data.avatar = request.FILES['avatar']
+        
+        user_data.save()
+        from django.contrib import messages
+        messages.success(request, '讚喔! 你現在煥然一新了!')
+        from django.urls import reverse
+        return redirect(f'{reverse("profile")}')
+    
+    context = {
+        'user_data': user_data,
+        'is_own_profile': is_own_profile,
+        'edit_mode': edit_mode
+    }
+    return render(request, 'profile/profile.html', context)
+
+def handler404(request, exception):
+    """
+    處理404錯誤
+    """
+    return render(request, 'error/404.html', status=404)
+
+def handler500(request):
+    """
+    處理500錯誤
+    """
+    return render(request, 'error/500.html', status=500)

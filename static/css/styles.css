@@ -54,8 +54,8 @@ body {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
-    height: 65px;  /* 固定高度確保垂直居中 */
-    padding: 0 2rem; /* 左右留白 */
+    height: 65px;
+    padding: 0.5rem 2rem;
 }
 
 /* 確保所有子元素垂直居中 */
@@ -83,11 +83,7 @@ body {
     height: 100%;
 }
 
-/* 調整按鈕內距 */
-.nav-btn {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
+
 
 .search-container {
     position: relative;
@@ -124,7 +120,6 @@ body {
     display: flex;
     gap: 1.5rem;
     align-items: center;
-    margin-bottom: 1%;
 }
 
 .nav-btn {
@@ -139,12 +134,36 @@ body {
     background: var(--primary-green);
     border: none;
     font-weight: 500;
+    cursor: pointer;
 }
 
-.nav-btn:hover {
+.header-nav-btn {
+    padding: 8px 20px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--dark-charcoal);
+    transition: all var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    font-weight: 500;
+    font-size: 0.95em;
+    cursor: pointer;
+    margin: auto 0;
+}
+
+.header-nav-btn:hover {
+    transform: scale(1.05);
+}
+
+.nav-btn:hover,
+.nav-btn.active {
     background: var(--secondary-green);
     transform: translateY(-2px);
     box-shadow: var(--shadow-soft);
+    color: white;
 }
 
 .user-dropdown {
@@ -442,25 +461,29 @@ body {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0,0,0,0.9);
-  color: white;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  background: rgba(255,255,255,0.95);
+  color: var(--dark-charcoal);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
   white-space: normal;
   max-width: 400px;
   word-break: break-word;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 10;
   max-width: 300px;
   width: max-content;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+  line-height: 1.5;
 }
 
 .desc-container:hover .desc-tooltip {
   opacity: 1;
-  transform: translateX(-50%) translateY(-8px);
+  transform: translateX(-50%) translateY(-12px);
 }
 
 .project-card:hover {
@@ -485,13 +508,43 @@ body {
 }
 
 .tech-tag {
-    display: inline-block;
-    padding: 4px 12px;
-    background: rgba(79, 209, 197, 0.15);
-    border-radius: 15px;
+    background-color: var(--primary-green);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
     font-size: 0.9em;
-    color: var(--neon-blue);
-    margin: 0 5px 5px 0;
+    margin-right: 8px;
+    display: inline-block;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: help;
+    position: relative;
+    transform-origin: center;
+    animation: tagPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.tech-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes tagPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .card-header {
@@ -895,8 +948,8 @@ body {
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
-    height: 65px;  /* 固定高度確保垂直居中 */
-    padding: 0 2rem; /* 左右留白 */
+    height: 65px;
+    padding: 0.5rem 2rem;
 }
 
 /* 確保所有子元素垂直居中 */
@@ -924,11 +977,7 @@ body {
     height: 100%;
 }
 
-/* 調整按鈕內距 */
-.nav-btn {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
+
 
 .search-container {
     position: relative;
@@ -965,7 +1014,6 @@ body {
     display: flex;
     gap: 1.5rem;
     align-items: center;
-    margin-bottom: 1%;
 }
 
 .nav-btn {
@@ -980,12 +1028,36 @@ body {
     background: var(--primary-green);
     border: none;
     font-weight: 500;
+    cursor: pointer;
 }
 
-.nav-btn:hover {
+.header-nav-btn {
+    padding: 8px 20px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--dark-charcoal);
+    transition: all var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: none;
+    font-weight: 500;
+    font-size: 0.95em;
+    cursor: pointer;
+    margin: auto 0;
+}
+
+.header-nav-btn:hover {
+    transform: scale(1.05);
+}
+
+.nav-btn:hover,
+.nav-btn.active {
     background: var(--secondary-green);
     transform: translateY(-2px);
     box-shadow: var(--shadow-soft);
+    color: white;
 }
 
 .user-dropdown {
@@ -1234,14 +1306,78 @@ body {
 }
 
 .project-card {
-    background: white;
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    transition: all var(--transition-speed) ease;
-    border: 1px solid rgba(0,0,0,0.05);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-soft);
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  transition: all var(--transition-speed) ease;
+  border: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.desc-container {
+  position: relative;
+  margin: 10px 0;
+}
+
+.project-description {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  max-height: 2.8em; /* 兩行高度 */
+  overflow: hidden;
+  position: relative;
+}
+
+.desc-container.needs-fade .project-description::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.26em;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.9) 80%);
+  display: none; /* 先隱藏漸層 */
+}
+
+.desc-container.needs-fade:hover .project-description::after {
+  display: block; /* 懸停時顯示漸層 */
+}
+
+.desc-container.needs-fade .project-description {
+  max-height: 2.8em;
+  overflow: hidden;
+}
+
+.desc-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.95);
+  color: var(--dark-charcoal);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  white-space: normal;
+  max-width: 400px;
+  word-break: break-word;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+  max-width: 300px;
+  width: max-content;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+  line-height: 1.5;
+}
+
+.desc-container:hover .desc-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-12px);
 }
 
 .project-card:hover {
@@ -1266,13 +1402,43 @@ body {
 }
 
 .tech-tag {
-    display: inline-block;
-    padding: 4px 12px;
-    background: rgba(79, 209, 197, 0.15);
-    border-radius: 15px;
+    background-color: var(--primary-green);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
     font-size: 0.9em;
-    color: var(--neon-blue);
-    margin: 0 5px 5px 0;
+    margin-right: 8px;
+    display: inline-block;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: help;
+    position: relative;
+    transform-origin: center;
+    animation: tagPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.tech-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes tagPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .card-header {
@@ -1381,3 +1547,544 @@ body {
         margin-right: 0;
     }
 }
+
+/* 高級分頁樣式 */
+.pagination {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  list-style: none;
+  padding-left: 0;
+}
+
+.page-link {
+  position: relative;
+  min-width: 100px;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+  backdrop-filter: blur(12px);
+  color: var(--dark-charcoal);
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  text-decoration: none !important;
+}
+
+.page-link:hover,
+.page-link:focus {
+  text-decoration: none !important;
+}
+
+.page-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.2) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  transform: skewX(-15deg);
+  transition: left 0.6s;
+}
+
+.page-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(42, 45, 67, 0.15);
+  color: var(--primary-green);
+}
+
+.page-link:hover::before {
+  left: 100%;
+}
+
+.page-item.active .page-link {
+  background: linear-gradient(145deg, var(--primary-green), #2c3e50);
+  color: white;
+  box-shadow: 0 4px 30px rgba(42, 45, 67, 0.3);
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.6;
+  background: rgba(255,255,255,0.1);
+}
+
+.glass-effect {
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-radius: 12px;
+  padding: 1.2rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-lg.glass-effect {
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+/* 專案卡片樣式 */
+.card {
+  border-radius: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+.card-title a {
+  text-decoration: none;
+  color: #2c3e50;
+}
+
+.card-title a:hover {
+  color: #3498db;
+}
+
+.badge {
+  background-color: #3498db;
+  color: white;
+  padding: 0.5em 0.8em;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+/* 文章詳情頁樣式 */
+.post-meta {
+    padding: 1.5rem;
+    margin: 2rem 0;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-green);
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-time {
+    color: var(--warm-gray);
+    font-size: 0.9em;
+}
+
+.like-section {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    
+}
+
+
+.like-btn {
+    background: none;
+    border: 1px solid var(--primary-green);
+    color: var(--primary-green);
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background: var(--primary-green);
+    color: white;
+}
+.del-btn {
+    color: #FF7575; 
+    border-color: #FF7575;
+    background: none;
+    border: 1px solid;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.del-btn:hover {
+    background: #FF7575;
+    color: white;
+}
+
+.comments-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.comment-form {
+    margin-bottom: 2rem;
+}
+
+.comment-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    resize: vertical;
+    margin-bottom: 1rem;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.comment-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--primary-green);
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.comment-author {
+    color: var(--primary-green);
+    font-weight: 500;
+}
+
+.comment-time {
+    color: var(--warm-gray);
+    font-size: 0.85em;
+}
+
+.comment-text {
+    color: var(--dark-charcoal);
+    line-height: 1.6;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', 'Microsoft JhengHei', sans-serif;
+}
+
+body {
+    background: var(--light-beige);
+    color: var(--dark-charcoal);
+    line-height: 1.8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 0.8rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.05);
+}
+
+.header-gradient {
+    height: 4px;
+    background: var(--primary-gradient);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    animation: gradientFlow 3s infinite alternate;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 65px;
+    padding: 0.5rem 2rem;
+}
+
+/* 確保所有子元素垂直居中 */
+.nav-container > * {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* 新增水平居中 */
+    flex-wrap: nowrap;        /* 防止换行 */
+    padding: 5px 0;          /* 增加垂直内距 */
+}
+
+/* 調整logo垂直對齊 */
+.nav-container img {
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+/* 確保所有導航元素垂直居中 */
+.nav-links,
+.search-container,
+.user-dropdown {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+
+
+.search-container {
+    position: relative;
+    flex-grow: 1;
+    max-width: 500px;
+    margin-right: 1rem;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-bar {
+    width: 100%;
+    padding: 12px 45px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0,0,0, 0.3);
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.nav-btn {
+    padding: 12px 30px;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: white;
+    transition: all var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--primary-green);
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: var(--secondary-green);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+    color: white;
+}
+
+.user-dropdown {
+    position: relative;
+}
+
+.user-profile {
+    background: none;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.user-profile:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: rgba(40, 40, 60, 0.95);
+    border-radius: 10px;
+    padding: 0.5rem;
+    min-width: 180px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.user-dropdown {
+    position: relative;
+}
+
+/* 建立無縫懸停區域 */
+.user-dropdown::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: transparent;
+    z-index: 1000;
+}
+
+.dropdown-content {
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+.user-dropdown:hover .dropdown-content,
+.dropdown-content:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition-delay: 0.1s;
+}
+
+/* 增加鼠標移轉緩衝區 */
+.dropdown-content::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: transparent;
+    z-index: 1003;
+}
+
+/* 加強下拉菜單定位 */
+.dropdown-content {
+    top: calc(100% + 5px);
+    margin-top: 0;
+    left: auto;
+    right: 0;
+    min-width: 200px;
+    padding: 12px 0;
+    z-index: 1001;
+}
+
+/* 確保下拉區域可觸發 */
+.dropdown-content::before {
+    content: '';
+    position: absolute;
+    top: -25px;  /* 增加緩衝區高度 */
+    left: -20px;  /* 向左延伸 */
+    right: -20px; /* 向右延伸 */
+    height: 40px; /* 增加垂直緩衝區 */
+    z-index: 1002; /* 提升層級 */
+    background: transparent;
+}
+
+/* 新增表單卡片樣式 */
+.auth-card, .form-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    margin: 1.5rem auto;
+    max-width: 600px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.form-group {
+    margin-bottom: 1.8rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: var(--dark-charcoal);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 14px 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    transition: all var(--transition-speed) ease;
+    font-size: 1rem;
+    color: var(--dark-charcoal);
+}
+
+.form-input:focus {
