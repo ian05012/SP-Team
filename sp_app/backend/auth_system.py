@@ -34,6 +34,12 @@ def login(request):
 
 
 # 註冊
+import random
+import os
+import hashlib
+from django.conf import settings
+from django.core.files import File
+
 def register(request):
     info_message = None  # 預設為無提示訊息
     if request.method == 'POST':
@@ -49,6 +55,18 @@ def register(request):
             new_user = user()
             new_user.username = account
             new_user.set_password(password)
+            
+            # 隨機選擇一個預設頭像
+            default_avatars = ['default1.png', 'default2.png', 'default3.png']
+            random_avatar = random.choice(default_avatars)
+            avatar_path = os.path.join(settings.MEDIA_ROOT, random_avatar)
+            
+            # 確保檔案存在
+            if os.path.exists(avatar_path):
+                # 設置用戶頭像
+                with open(avatar_path, 'rb') as f:
+                    new_user.avatar.save(random_avatar, File(f), save=False)
+            
             new_user.save()
             info_message = '註冊成功，請登入您的帳號！'
 

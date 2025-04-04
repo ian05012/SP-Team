@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from django import forms
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+import os
+import hashlib
 
 def handler404(request, exception):
     return render(request, 'error/404.html', status=404)
@@ -215,7 +217,17 @@ def profile(request, username=None):
         
         # 處理頭像上傳
         if 'avatar' in request.FILES:
-            user_data.avatar = request.FILES['avatar']
+            avatar_file = request.FILES['avatar']
+            # 獲取檔案副檔名
+            file_ext = os.path.splitext(avatar_file.name)[1]
+            # 使用用戶名稱和時間戳生成雜湊值，確保檔名唯一
+            hash_obj = hashlib.md5((user_data.username + str(timezone.now().timestamp())).encode())
+            hashed_name = hash_obj.hexdigest()
+            # 新的檔名：用戶名稱_雜湊值.副檔名
+            new_filename = f"{user_data.username}_{hashed_name}{file_ext}"
+            # 設置新的檔名
+            avatar_file.name = new_filename
+            user_data.avatar = avatar_file
         
         user_data.save()
         from django.contrib import messages
