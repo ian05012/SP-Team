@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SP-HUB | 個人資料</title>
+    <title>SP HUB | 個人資料</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
@@ -128,7 +128,7 @@
     <header class="glass-header" style="padding: 0.5rem 2rem">
 
         <nav class="nav-container">
-            <a href="{% url 'index' %}" style="text-decoration: none; color: black;"><h1>SP-HUB</h1></a>
+            <a href="{% url 'index' %}" style="text-decoration: none; color: black;"><h1>Side Project Hub</h1></a>
             
             <form method="GET" action="{% url 'explore' %}" class="search-container">
                 <i class="fas fa-search search-icon"></i>
@@ -205,7 +205,7 @@
                         <input type="file" name="avatar" id="avatar" accept="image/*">
                     </div>
                     <div class="form-group">
-                        <label for="username">用戶名</label>
+                        <label for="username">帳號名</label>
                         <input type="text" name="username" id="username" value="{{ user_data.username }}" required>
                     </div>
                     <div class="form-group">
@@ -248,7 +248,7 @@
                 </div>
                 
                 <div class="profile-field">
-                    <label for="name">姓名</label>
+                    <label for="name">暱稱</label>
                     <input type="text" id="name" name="name" value="{{ user_data.name }}" required>
                 </div>
                 
@@ -291,12 +291,12 @@
                 </div>
                 
                 <div class="profile-field">
-                    <label for="custom_site_name">自定義網站名稱</label>
+                    <label for="custom_site_name">還有想補充的？　個人網站名稱</label>
                     <input type="text" id="custom_site_name" name="custom_site_name" value="{{ user_data.custom_site_name }}" placeholder="例如：個人部落格、作品集等">
                 </div>
                 
                 <div class="profile-field">
-                    <label for="custom_site_url">自定義網站連結</label>
+                    <label for="custom_site_url">個人網站網址</label>
                     <input type="url" id="custom_site_url" name="custom_site_url" value="{{ user_data.custom_site_url }}" placeholder="https://example.com">
                 </div>
             </div>
@@ -314,7 +314,7 @@
                 <h3>基本資料</h3>
                 
                 <div class="profile-field">
-                    <label>姓名</label>
+                    <label>暱稱</label>
                     <p>{{ user_data.name }}</p>
                 </div>
                 
@@ -372,7 +372,7 @@
                         {% endif %}
                         
                         {% if not user_data.github and not user_data.instagram and not user_data.line and not user_data.custom_site_url %}
-                            <p>未設置社交媒體連結</p>
+                            <p>這個人似乎不想讓別人聯絡他...</p>
                         {% endif %}
                     </div>
                 </div>
@@ -403,7 +403,7 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p>尚未發布任何團隊招募文章</p>
+                    <p>這個人似乎沒有創建甚麼團隊...</p>
                     {% endif %}
                 </div>
                 
@@ -421,7 +421,7 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p>尚未發布任何作品發布文章</p>
+                    <p>這個人似乎沒有發布甚麼作品...</p>
                     {% endif %}
                 </div>
                 
@@ -439,7 +439,7 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p>尚未發布任何心得分享文章</p>
+                    <p>這個人似乎沒有分享什麼心得...</p>
                     {% endif %}
                 </div>
             </div>
@@ -450,7 +450,7 @@
 
 <footer class="footer">
     <div class="footer-content">
-        <p>&copy; 2023 SP-HUB. All rights reserved.</p>
+        <p>&copy; 2023 Side Project Hub. All rights reserved.</p>
     </div>
 </footer>
 
