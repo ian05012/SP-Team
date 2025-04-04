@@ -48,7 +48,8 @@ class Post(models.Model):
     # 文章類型選項
     TYPE_CHOICES = (
         ('team', '團隊招募'),
-        ('project', '作品分享'),
+        ('project', '作品發布'),
+        ('experience', '心得分享'),
     )
     
     title = models.TextField(default="")

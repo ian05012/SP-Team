@@ -6,6 +6,7 @@
   <title>SP-HUB | 創建團隊</title>
   {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
   <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
   <style>
@@ -82,7 +83,7 @@
                         {% else %}
                             <i class="fas fa-user-astronaut"></i>
                         {% endif %}
-                        <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                        <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}{% if request.user.name %}({{ request.user.name }}){% endif %}</a></span>
                     </button>
                     <div class="dropdown-content">
                         <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
@@ -113,7 +114,8 @@
         <label for="post_type"><i class="fas fa-file-alt"></i> 文章類型</label>
         <select id="post_type" name="post_type" class="form-input">
           <option value="team">團隊招募</option>
-          <option value="project">作品分享</option>
+          <option value="project">作品發布</option>
+          <option value="experience">心得分享</option>
         </select>
       </div>
       <div class="form-group">
@@ -271,5 +273,9 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
+
+<!-- 響應式設計JavaScript -->
+<script src="{% static 'js/responsive.js' %}"></script>
+
 </body>
 </html>

@@ -1,0 +1,491 @@
+/* 響應式設計樣式 */
+
+/* 基本響應式設計 */
+@media (max-width: 1200px) {
+    .project-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .project-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .profile-container {
+        padding: 1.5rem;
+    }
+    
+    .form-card {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .content {
+        padding: 1rem;
+    }
+    
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .article-container {
+        flex-direction: column;
+    }
+    
+    .post-meta {
+        margin-top: 1rem;
+        width: 100%;
+    }
+    
+    .comment-header {
+        flex-wrap: wrap;
+    }
+    
+    /* 改進表單在移動端的顯示 */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-input, 
+    .form-textarea {
+        padding: 0.8rem;
+    }
+    
+    /* 改進按鈕在移動端的顯示 */
+    .nav-btn,
+    .header-nav-btn,
+    .edit-profile-btn,
+    .submit-btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+    
+    /* 改進文章內容在移動端的顯示 */
+    .post-content-body {
+        padding: 1rem !important;
+        margin: 1rem 0 !important;
+    }
+    
+    /* 優化小屏幕設備上的字體大小 */
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.3rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    /* 優化小屏幕設備上的間距 */
+    .section-header {
+        margin-bottom: 1rem;
+    }
+    
+    .decorative-line {
+        margin: 0.5rem auto;
+    }
+    
+    /* 優化小屏幕設備上的卡片樣式 */
+    .glass-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* 優化小屏幕設備上的表格顯示 */
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    /* 優化小屏幕設備上的圖片顯示 */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* 超小屏幕設備優化 */
+@media (max-width: 480px) {
+    .mobile-menu-overlay {
+        width: 90%;
+    }
+    
+    .post-content-body {
+        padding: 0.8rem !important;
+    }
+    
+    .author-details {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .author-details > div {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .post-time {
+        margin-top: 0.3rem;
+        font-size: 0.8rem;
+    }
+    
+    .like-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .tech-stack {
+        margin-top: 0.5rem;
+    }
+    
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .comment-time {
+        margin-left: 0;
+        margin-top: 0.3rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* 手機版導航欄 */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        
+    }
+    
+    .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        padding: 1rem 0;
+    }
+    
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .header-nav-btn {
+        width: 100%;
+        margin: 0.5rem 0;
+        text-align: left;
+    }
+    
+    .search-container {
+        position: fixed;
+        top: 0; /* 從頁面最頂部開始 */
+        left: 0;
+        width: 100%; /* 寬度延伸到頁面邊緣 */
+        padding: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: none; /* 默認隱藏搜尋欄 */
+        transition: all 0.4s ease-in-out, opacity 0.3s ease; /* 與mobile-menu-overlay一致的過渡效果 */
+        opacity: 0;
+        background-color: rgba(255, 255, 255, 0.98) !important; /* 與mobile-menu-overlay一致的背景 */
+        z-index: 1005; /* 提高z-index確保在所有遮罩層之上 */
+        margin: 0; /* 移除margin確保寬度100% */
+        max-width: none; /* 移除最大寬度限制 */
+        border-radius: 0; /* 移除圓角 */
+    }
+    
+    /* 調整搜尋框內部元素樣式 */
+    .search-container .search-bar {
+        width: 100%;
+        max-width: 1200px; /* 限制最大寬度，但仍然比原來寬 */
+        margin: 0 auto; /* 水平居中 */
+        padding-left: 2.5rem; /* 確保有足夠空間放置搜尋圖示 */
+    }
+    
+    /* 確保搜尋圖示在框內 */
+    .search-container .search-icon {
+        position: absolute;
+        left: 1.6rem; /* 向右移動搜尋圖示 */
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        z-index: 1003;
+    }
+    
+    .search-container.active {
+        display: flex;
+        opacity: 1;
+        z-index: 1005; /* 提高z-index確保在所有遮罩層之上 */
+        background-color: #ffffff !important; /* 確保背景為純白色 */
+        transform: translateY(0);
+        animation: fadeInDown 0.4s ease-in-out;
+        justify-content: center; /* 水平居中搜尋框內容 */
+        pointer-events: auto; /* 確保可以點擊搜尋框 */
+        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+    
+    /* 添加搜尋欄背景遮罩 */
+    .search-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999; /* 調整z-index與mobile-menu-backdrop一致 */
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: auto; /* 確保點擊事件有效 */
+    }
+    
+    /* 確保搜尋框不受遮罩影響 */
+    .search-backdrop.active + .search-container.active,
+    .search-backdrop.active ~ .search-container.active,
+    .search-container.active {
+        background-color: #ffffff !important;
+        z-index: 1005;
+    }
+    
+    .search-backdrop.active {
+        display: block;
+        opacity: 1;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* 導航圖示按鈕共用樣式 */
+    .nav-icon-btn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        background: none !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        color: var(--primary-green);
+        cursor: pointer;
+        z-index: 1001 !important;
+        padding: 10px !important; /* 增大點擊區域 */
+        height: 40px !important; /* 固定高度確保垂直居中 */
+        width: auto !important;
+        margin: 0 !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    .search-icon-btn {
+        right: 6rem !important; /* 增加與選單圖示的間距，向左移動 */
+        font-size: 1.2rem !important;
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        background: none !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    /* 確保內容不會與導航欄重疊 */
+    .content, .project-grid, main {
+        margin-top: 2rem;
+    }
+    
+    .mobile-menu-btn {
+        right: 2rem !important;
+        font-size: 1.5rem !important;
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        background: none !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    /* 確保按鈕在header中正確顯示 */
+    .nav-container .nav-icon-btn {
+        position: absolute;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }
+    
+    /* 確保按鈕不受其他樣式影響 */
+    .nav-container .search-icon-btn,
+    .nav-container .mobile-menu-btn {
+        display: flex !important;
+        width: auto !important;
+        margin: 0 !important;
+        text-align: center !important;
+    }
+    
+    .user-dropdown {
+        width: 100%;
+    }
+    
+    .dropdown-content {
+        position: static;
+        display: none;
+        box-shadow: none;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .user-dropdown:hover .dropdown-content {
+        display: none;
+    }
+    
+    .dropdown-content.active {
+        display: block;
+    }
+    
+    .mobile-menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 80%;
+        height: 100%;
+        background-color: white;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        overflow-y: auto;
+        padding: 1rem;
+    }
+    
+    .mobile-menu-overlay.active {
+        display: block;
+        transform: translateX(0);
+        animation: slideIn 0.3s ease-in-out;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .mobile-menu-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--primary-green);
+        cursor: pointer;
+    }
+    
+    .mobile-menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 1rem;
+    }
+    
+    .mobile-menu-links {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-menu-links a {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #eee;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        align-items: center;
+    }
+    
+    .mobile-menu-links a i {
+        margin-right: 0.5rem;
+        width: 20px;
+        text-align: center;
+    }
+    
+    /* 改進移動端選單的背景和動畫 */
+    .mobile-menu-overlay {
+        background-color: rgba(255, 255, 255, 0.98);
+        transition: transform 0.4s ease-in-out, opacity 0.3s ease;
+        opacity: 0;
+    }
+    
+    .mobile-menu-overlay.active {
+        opacity: 1;
+    }
+    
+    /* 添加移動端選單的遮罩層 */
+    .mobile-menu-backdrop {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .mobile-menu-backdrop.active {
+        display: block;
+        opacity: 1;
+    }
+}
+
+/* 確保移動端菜單元素在桌面版完全隱藏 */
+@media (min-width: 769px) {
+    .mobile-menu-btn,
+    .mobile-menu-overlay,
+    .mobile-menu-backdrop {
+        display: none !important;
+    }
+}

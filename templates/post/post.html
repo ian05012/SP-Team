@@ -6,6 +6,7 @@
     <title>SP-HUB | 專案詳情</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
     <style>
         .like-btn {
@@ -40,6 +41,40 @@
         .liked .fa-rocket {
             color: #ff6b6b !important;
         }
+        
+        /* 增強響應式設計 */
+        @media (max-width: 768px) {
+            .article-container {
+                flex-direction: column;
+            }
+            
+            .post-meta {
+                margin-top: 1rem;
+                width: 100%;
+            }
+            
+            .like-section {
+                flex-wrap: wrap;
+            }
+            
+            .tech-stack {
+                margin-top: 0.5rem;
+                width: 100%;
+            }
+            
+            .comment-header {
+                flex-wrap: wrap;
+            }
+            
+            .comment-author, .comment-time {
+                margin-bottom: 0.5rem;
+            }
+            
+            .comment-form button {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -70,7 +105,7 @@
                             {% else %}
                                 <i class="fas fa-user-astronaut"></i>
                             {% endif %}
-                            <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                            <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{% if request.user.name %}{{ request.user.name }} <small style="font-size: 0.8em; opacity: 0.8;">@{{ request.user.username }}</small>{% else %}{{ request.user.username }}{% endif %}</a></span>
                         </button>
                         <div class="dropdown-content">
                             <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
@@ -111,7 +146,7 @@
             {% endif %}
             <div class="author-details" style="display: flex; align-items: center; gap: 1rem; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <h3 class="neon-text"><a href="{% url 'profile_with_username' post.author.username %}" style="text-decoration: none; color: inherit;">{{ post.author.username }}</a></h3>
+                    <h3 class="neon-text"><a href="{% url 'profile_with_username' post.author.username %}" style="text-decoration: none; color: inherit;">{% if post.author.name %}{{ post.author.name }} <small style="font-size: 0.8em; opacity: 0.8;">@{{ post.author.username }}</small>{% else %}{{ post.author.username }}{% endif %}</a></h3>
                     <span class="post-time">{{ post.created|date:"Y/m/d H:i" }}</span>
                 </div>
                 
@@ -119,7 +154,7 @@
             </div>
             
             <div class="like-section" style="display: flex; gap: 15px;">
-                {% if request.user == post.author %}
+                {% if request.user == post.author or　request.user.is_superuser%}
                 <button class="del-btn" onclick="confirmDelete(`{% url 'delete_post' post.id %}`, '文章')" title="刪除文章">
                     <i class="fas fa-trash-alt"></i>
                     <span class="btn-text">刪除</span>
@@ -154,7 +189,7 @@
                                 {% else %}
                                 <i class="fas fa-user-circle comment-avatar" style="font-size: 2rem;"></i>
                                 {% endif %}
-                                <span class="comment-author neon-text"><a href="{% url 'profile_with_username' comment.author.username %}" style="text-decoration: none; color: inherit;">{{ comment.author.username }}</a></span>
+                                <span class="comment-author neon-text"><a href="{% url 'profile_with_username' comment.author.username %}" style="text-decoration: none; color: inherit;">{% if comment.author.name %}{{ comment.author.name }} <small style="font-size: 0.8em; opacity: 0.8;">@{{ comment.author.username }}</small>{% else %}{{ comment.author.username }}{% endif %}</a></span>
                                 <span class="comment-time">{{ comment.created|date:"Y/m/d H:i" }}</span>
                                 {% if request.user == comment.author %}
                                 <button class="del-btn" 
@@ -261,5 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
     {% endif %}
 });
 </script>
+
+<!-- 響應式設計JavaScript -->
+<script src="{% static 'js/responsive.js' %}"></script>
+
 </body>
 </html>

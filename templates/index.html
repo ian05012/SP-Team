@@ -6,6 +6,7 @@
     <title>SP-HUB | 首頁</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
     <style>
         .tech-tag {
@@ -38,6 +39,8 @@
             border-radius: 4px;
             font-size: 0.9em;
             transition: all 0.3s ease;
+            width: auto;
+            display: inline-block;
         }
 
         .nav-btn:hover,
@@ -75,7 +78,7 @@
                         {% else %}
                             <i class="fas fa-user-astronaut"></i>
                         {% endif %}
-                        <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                        <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}{% if request.user.name %}({{ request.user.name }}){% endif %}</a></span>
                     </button>
                     <div class="dropdown-content">
                         <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
@@ -97,9 +100,10 @@
             <span class="highlight">最新文章</span>
         </h2>
         <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-            <a href="{% url 'index' %}" class="nav-btn neon-hover active" style="margin: 0 10px;">全部</a>
-            <a href="{% url 'explore' %}?type=team" class="nav-btn neon-hover" style="margin: 0 10px;">團隊招募</a>
-            <a href="{% url 'explore' %}?type=project" class="nav-btn neon-hover" style="margin: 0 10px;">作品分享</a>
+            <a href="{% url 'index' %}" class="nav-btn neon-hover active" style="margin: 0 10px; display: inline-block; min-width: auto;">全部</a>
+            <a href="{% url 'explore' %}?type=team" class="nav-btn neon-hover" style="margin: 0 10px; display: inline-block; min-width: auto;">團隊招募</a>
+            <a href="{% url 'explore' %}?type=project" class="nav-btn neon-hover" style="margin: 0 10px; display: inline-block; min-width: auto;">作品發布</a>
+            <a href="{% url 'explore' %}?type=experience" class="nav-btn neon-hover" style="margin: 0 10px; display: inline-block; min-width: auto;">心得分享</a>
         </div>
         <div class="decorative-line"></div>
     </div>
@@ -130,7 +134,7 @@
             <div class="project-meta">
                 <div class="meta-item">
                     <i class="fa-solid fa-user"></i>
-                    <a href="{% url 'profile_with_username' post.author.username %}" style="text-decoration: none; color: inherit;">{{post.author.username}}</a>
+                    <a href="{% url 'profile_with_username' post.author.username %}" style="text-decoration: none; color: inherit;">{{post.author.username}}{% if post.author.name %}({{ post.author.name }}){% endif %}</a>
                 </div>
             </div>
         </a>
@@ -154,15 +158,10 @@
 
 </footer>
 
-<!-- Inline JavaScript -->
-{% if messages %}
-    <script>
-        {% for msg in messages %}
-            alert('{{msg.message}}');
-        {% endfor %}
-    </script>
-{% endif %}
 
+
+<!-- 響應式設計JavaScript -->
+<script src="{% static 'js/responsive.js' %}"></script>
 
 </body>
 </html>

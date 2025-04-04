@@ -6,6 +6,7 @@
     <title>SP-HUB | 個人資料</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <script src="https://kit.fontawesome.com/04a6b0e02e.js" crossorigin="anonymous"></script>
     <style>
         .profile-container {
@@ -150,7 +151,7 @@
                             {% else %}
                                 <i class="fas fa-user-astronaut"></i>
                             {% endif %}
-                            <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}</a></span>
+                            <span><a href="{% url 'profile_with_username' request.user.username %}" style="text-decoration: none; color: inherit;">{{ request.user.username }}{% if request.user.name %}({{ request.user.name }}){% endif %}</a></span>
                         </button>
                         <div class="dropdown-content">
                             <a href="{% url 'profile' %}"><i class="fas fa-user"></i>個人資料</a>
@@ -382,53 +383,64 @@
                 <h3>發布的文章</h3>
                 
                 <!-- 分類標籤 -->
-                <div style="display: flex; margin-bottom: 20px;">
-                    <a href="#team-posts" class="nav-btn neon-hover active" style="margin-right: 10px;" onclick="showTab('team-posts', this); return false;">團隊招募</a>
-                    <a href="#project-posts" class="nav-btn neon-hover" style="margin-right: 10px;" onclick="showTab('project-posts', this); return false;">作品分享</a>
+                <div style="display: flex; flex-wrap: wrap; margin-bottom: 20px;">
+                    <a href="#team-posts" class="nav-btn neon-hover active" style="margin-right: 10px; margin-bottom: 10px;" onclick="showTab('team-posts', this); return false;">團隊招募</a>
+                    <a href="#project-posts" class="nav-btn neon-hover" style="margin-right: 10px; margin-bottom: 10px;" onclick="showTab('project-posts', this); return false;">作品發布</a>
+                    <a href="#experience-posts" class="nav-btn neon-hover" style="margin-right: 10px; margin-bottom: 10px;" onclick="showTab('experience-posts', this); return false;">心得分享</a>
                 </div>
                 
                 <!-- 團隊招募文章 -->
                 <div id="team-posts" class="post-tab">
-                    {% with team_posts=user_data.post_set.all|dictsortreversed:"created" %}
                     {% if team_posts %}
                     <div class="project-list">
                         {% for post in team_posts %}
-                        {% if post.post_type == "team" %}
                         <div class="project-item">
                             <a href="{% url 'post_detail' post.id %}" class="project-link" style="text-decoration: none; color: inherit;">
                                 <h3 class="project-title">{{ post.title }}</h3>
                                 <p class="project-description">{{ post.description }}</p>
                             </a>
                         </div>
-                        {% endif %}
                         {% endfor %}
                     </div>
                     {% else %}
                     <p>尚未發布任何團隊招募文章</p>
                     {% endif %}
-                    {% endwith %}
                 </div>
                 
-                <!-- 作品分享文章 -->
+                <!-- 作品發布文章 -->
                 <div id="project-posts" class="post-tab" style="display: none;">
-                    {% with project_posts=user_data.post_set.all|dictsortreversed:"created" %}
                     {% if project_posts %}
                     <div class="project-list">
                         {% for post in project_posts %}
-                        {% if post.post_type == "project" %}
                         <div class="project-item">
                             <a href="{% url 'post_detail' post.id %}" class="project-link" style="text-decoration: none; color: inherit;">
                                 <h3 class="project-title">{{ post.title }}</h3>
                                 <p class="project-description">{{ post.description }}</p>
                             </a>
                         </div>
-                        {% endif %}
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p>尚未發布任何作品分享文章</p>
+                    <p>尚未發布任何作品發布文章</p>
                     {% endif %}
-                    {% endwith %}
+                </div>
+                
+                <!-- 心得分享文章 -->
+                <div id="experience-posts" class="post-tab" style="display: none;">
+                    {% if experience_posts %}
+                    <div class="project-list">
+                        {% for post in experience_posts %}
+                        <div class="project-item">
+                            <a href="{% url 'post_detail' post.id %}" class="project-link" style="text-decoration: none; color: inherit;">
+                                <h3 class="project-title">{{ post.title }}</h3>
+                                <p class="project-description">{{ post.description }}</p>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>尚未發布任何心得分享文章</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -497,9 +509,45 @@
     .project-item .project-description {
         color: var(--warm-gray);
         font-size: 0.95rem;
+    }
+    
+    /* 響應式設計增強 */
+    @media (max-width: 768px) {
+        .profile-container {
+            padding: 1rem;
+            margin: 1rem;
+        }
+        
+        .profile-header {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            margin-right: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-field {
+            margin-bottom: 1rem;
+        }
+        
+        .profile-field label {
+            margin-bottom: 0.3rem;
+        }
+        
+        .edit-profile-btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
         margin: 0;
     }
 </style>
+
+<!-- 響應式設計JavaScript -->
+<script src="{% static 'js/responsive.js' %}"></script>
 
 <style>
     /* 修改分類標籤按鈕樣式 */

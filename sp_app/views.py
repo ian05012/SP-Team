@@ -111,7 +111,7 @@ def create_post(request):
 @login_required
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if request.user != post.author:
+    if request.user != post.author and not request.user.is_superuser:
         return JsonResponse({'error': '無操作權限'}, status=403)
     try:
         post.delete()
@@ -122,7 +122,7 @@ def delete_post(request, post_id):
 @login_required
 def delete_comment(request, post_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
-    if request.user != comment.author:
+    if request.user != comment.author and not request.user.is_superuser:
         return JsonResponse({'error': '無操作權限'}, status=403)
     try:
         comment.delete()
@@ -165,20 +165,41 @@ def check_like(request, post_id):
 @login_required
 def profile(request, username=None):
     """
-    用戶個人資料頁面
+    用戶個人資料頁面 - 需要登入才能訪問
     """
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    
     if username:
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
+        # 查看特定用戶的資料
         user_data = get_object_or_404(User, username=username)
         is_own_profile = request.user == user_data
     else:
+        # 查看自己的資料
         user_data = request.user
         is_own_profile = True
     
-    edit_mode = request.GET.get('edit', 'false').lower() == 'true'
+    # 嚴格檢查：只有自己的個人資料頁面才能進入編輯模式
+    edit_mode = False
+    if request.GET.get('edit', 'false').lower() == 'true':
+        # 必須是自己的資料才能編輯
+        if is_own_profile:
+            edit_mode = True
+        else:
+            # 如果嘗試編輯他人資料，重定向到查看模式並顯示錯誤訊息
+            from django.urls import reverse
+            from django.contrib import messages
+            messages.error(request, '您沒有權限編輯其他用戶的資料')
+            return redirect(reverse('profile_with_username', kwargs={'username': username}))
     
-    if request.method == 'POST' and is_own_profile:
+    # 再次檢查：確保只有本人才能提交表單更新資料
+    if request.method == 'POST':
+        # 必須是自己的資料
+        if not is_own_profile:
+            from django.http import HttpResponseForbidden
+            return HttpResponseForbidden("您沒有權限編輯此用戶的資料")
+            
+        # 只有通過權限檢查才能更新資料
         # 處理表單提交
         user_data.username = request.POST.get('username', user_data.username)
         user_data.email = request.POST.get('email', user_data.email)
@@ -200,12 +221,20 @@ def profile(request, username=None):
         from django.contrib import messages
         messages.success(request, '讚喔! 你現在煥然一新了!')
         from django.urls import reverse
-        return redirect(f'{reverse("profile")}')
+        return redirect(reverse('profile'))
+    
+    # 獲取用戶發布的文章
+    team_posts = user_data.post_set.filter(post_type='team').order_by('-created')
+    project_posts = user_data.post_set.filter(post_type='project').order_by('-created')
+    experience_posts = user_data.post_set.filter(post_type='experience').order_by('-created')
     
     context = {
         'user_data': user_data,
         'is_own_profile': is_own_profile,
-        'edit_mode': edit_mode
+        'edit_mode': edit_mode,
+        'team_posts': team_posts,
+        'project_posts': project_posts,
+        'experience_posts': experience_posts
     }
     return render(request, 'profile/profile.html', context)
 
