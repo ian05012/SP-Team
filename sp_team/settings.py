@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-fxswyi-2biw$n&lx3!5#&^_&t5xg#4x!dfvgoh%#!4bi))c2by
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['13.210.102.97','sphub.ip-ddns.com','*']
 
 # 配置錯誤處理器
 HANDLER404 = 'sp_app.views.handler404'
@@ -126,10 +126,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # 用於生產環境收集靜態檔案
+STATICFILES_DIRS = [BASE_DIR / 'static']  # 開發環境中查找靜態檔案的目錄
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
 
 # Media files (User uploaded files)
 MEDIA_URL = '/media/'
