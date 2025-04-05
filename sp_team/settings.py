@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-fxswyi-2biw$n&lx3!5#&^_&t5xg#4x!dfvgoh%#!4bi))c2by
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://3.104.76.103/','sphub.ip-ddns.com','*']
+ALLOWED_HOSTS = ['52.63.122.132','sphub.ip-ddns.com','*']
 
 # 配置錯誤處理器
 HANDLER404 = 'sp_app.views.handler404'
