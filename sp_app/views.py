@@ -12,7 +12,8 @@ import hashlib
 
 def handler404(request, exception):
     return render(request, 'error/404.html', status=404)
-
+def handler500(request, exception):
+    return render(request, 'error/500.html', status=500)
 def explore(request):
     query = request.GET.get('search_query', '')
     post_type = request.GET.get('type', 'all')
@@ -22,8 +23,9 @@ def explore(request):
         post_list = post_list.filter(
             Q(title__icontains=query) |
             Q(author__username__icontains=query) |
-            Q(description__icontains=query)
-        )
+            Q(description__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
     
     if post_type and post_type != 'all':
         post_list = post_list.filter(post_type=post_type)
@@ -60,11 +62,22 @@ def post_detail(request, post_id):
             
         form = CommentForm(request.POST)
         if form.is_valid():
-            Comment.objects.create(
+            comment = Comment.objects.create(
                 content=form.cleaned_data['content'],
                 post=post,
                 author=request.user
             )
+            
+            # 創建通知 - 當評論者不是文章作者時才創建通知
+            if request.user != post.author:
+                from .models import Notification
+                Notification.objects.create(
+                    recipient=post.author,
+                    sender=request.user,
+                    post=post,
+                    notification_type='comment'
+                )
+                
             return HttpResponseRedirect(request.path)
     
     # 取得排序後的留言
@@ -91,7 +104,15 @@ def index(request):
     posts_list = post_manager.get_posts_list()
     if len(posts_list) >= 12:
         posts_list = posts_list[:12]
-    return render(request, 'index.html', {'posts_list': posts_list})
+    
+    # 獲取活躍的公告
+    from .models import Announcement
+    active_announcement = Announcement.objects.filter(is_active=True).first()
+    
+    return render(request, 'index.html', {
+        'posts_list': posts_list,
+        'announcement': active_announcement
+    })
 
 
 # 登入
@@ -151,6 +172,17 @@ def toggle_like(request, post_id):
         UserLike.objects.create(user=request.user, post=post)
         post.likes += 1
         post.save()
+        
+        # 創建通知 - 當點讚者不是文章作者時才創建通知
+        if request.user != post.author:
+            from .models import Notification
+            Notification.objects.create(
+                recipient=post.author,
+                sender=request.user,
+                post=post,
+                notification_type='like'
+            )
+        
         return JsonResponse({'liked': True, 'likes_count': post.likes})
 
 def check_like(request, post_id):
@@ -261,3 +293,52 @@ def handler500(request):
     處理500錯誤
     """
     return render(request, 'error/500.html', status=500)
+
+@login_required
+def get_notifications(request):
+    """
+    獲取當前用戶的通知
+    """
+    from .models import Notification
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-created_at')
+    
+    # 將通知轉換為JSON格式
+    notifications_data = [{
+        'id': notification.id,
+        'sender': notification.sender.username,
+        'post_id': notification.post.id,
+        'post_title': notification.post.title,
+        'notification_type': notification.notification_type,
+        'is_read': notification.is_read,
+        'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'message': str(notification)
+    } for notification in notifications]
+    
+    return JsonResponse({'notifications': notifications_data})
+
+@login_required
+def mark_notification_as_read(request, notification_id):
+    """
+    將通知標記為已讀
+    """
+    from .models import Notification
+    try:
+        notification = Notification.objects.get(id=notification_id, recipient=request.user)
+        notification.is_read = True
+        notification.save()
+        return JsonResponse({'success': True})
+    except Notification.DoesNotExist:
+        return JsonResponse({'error': '通知不存在'}, status=404)
+
+@login_required
+def delete_notification(request, notification_id):
+    """
+    刪除通知
+    """
+    from .models import Notification
+    try:
+        notification = Notification.objects.get(id=notification_id, recipient=request.user)
+        notification.delete()
+        return JsonResponse({'success': True})
+    except Notification.DoesNotExist:
+        return JsonResponse({'error': '通知不存在'}, status=404)

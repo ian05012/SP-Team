@@ -50,8 +50,8 @@
             <i class="fas fa-search search-icon"></i>
             <input type="text" 
                    class="search-bar" 
-                   name="search_query"
-                   placeholder="搜尋專案、作者或描述..."
+ˊ窗                   name="search_query"
+                   placeholder="搜尋專案、作者、描述或標籤..."
                    value="{{ search_query|default:'' }}">
             <button type="submit" class="search-btn" style="display: none;"></button>
         </form>
@@ -111,7 +111,9 @@
                     </div>
                     {% if post.post_type == 'team' %}
                     <i class="fas fa-users card-icon" style="color: var(--gold-accent);"></i>
-                    {% else %}
+                    {% elif post.post_type == 'experience' %}
+                    <i class="fa-solid fa-comments card-icon"></i>
+                    {%else%}
                     <i class="fas fa-project-diagram card-icon" style="color: var(--gold-accent);"></i>
                     {% endif %}
                 </div>
@@ -190,6 +192,7 @@
 <footer>
     <div class="footer" style="text-align: center;">
         <p>Copyright © 2025 Side Project Hub. All rights reserved.</p>
+        <p>Email: ian31333025@gmail.com</p>
     </div>
 </footer>
 

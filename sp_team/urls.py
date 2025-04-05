@@ -40,6 +40,7 @@ urlpatterns = [
 
     path('profile/<str:username>/', views.profile, name='profile_with_username'),
     
+    # 公告管理已移至Django管理員介面
 ]
 
 # 在開發環境中添加媒體文件的URL

@@ -71,9 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
             searchIconBtn.classList.add('nav-icon-btn');
             searchContainer.classList.remove('active');
             
-            // 複製導航鏈接到移動端菜單
+            // 複製導航鏈接到移動端菜單，排除用戶名稱鏈接
             mobileMenuLinks.innerHTML = '';
-            const links = navLinks.querySelectorAll('a:not(.dropdown-content a)');
+            const links = navLinks.querySelectorAll('a:not(.dropdown-content a):not(.user-dropdown a):not(.user-profile a):not([href*="profile_with_username"])');
             links.forEach(link => {
                 const newLink = link.cloneNode(true);
                 mobileMenuLinks.appendChild(newLink);
@@ -86,9 +86,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const dropdownContent = userDropdown.querySelector('.dropdown-content');
                 
                 if (dropdownBtn && dropdownContent) {
-                    const userInfo = dropdownBtn.cloneNode(true);
-                    mobileMenuLinks.appendChild(userInfo);
-                    
+                    // 不再添加用戶按鈕，因為用戶名稱已經在導航鏈接中
+                    // 直接添加下拉菜單中的鏈接
                     const dropdownLinks = dropdownContent.querySelectorAll('a');
                     dropdownLinks.forEach(link => {
                         const newLink = link.cloneNode(true);
